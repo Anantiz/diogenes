@@ -27,3 +27,34 @@ TO-RESEARCH: How to represent forks states using only one variable and status co
 .The main thread is the table
 	Forks are stored in a variable in the table thread
 	The table thread is also the one who will summon everything
+
+
+//IT's just a txt file and my projecti is in C, but it's a good way to tell pseudo code apart lmao
+if __name__ == "__main__"
+
+data = Parse_input(argv)
+Init_shared_resources(data)
+	{
+		mutex	forks[philosophers_count];
+	}
+
+// Create a new thread for each philosopher, and tell them to do philosopher()
+Init_philosophers(philosophers_count)
+
+philosopher()
+{
+	self.last_meal = current_epoch
+	While slef.Alive and self.meal_count < max_meal
+		Change_state(self, THINK)
+		Queue to lock shared forks
+			Once both forks are locked
+				Change_state (self, EAT)
+				Eat (time_to_eat)
+				self.last_meal = current_epoch
+				Unlock forks
+			if current_epoch - last_meal > time_to_die
+				die
+				EXIT() // failed to keep philosophers alive
+		Change_state (self, SLEEP)
+		Sleep (time_to_sleep)
+}
