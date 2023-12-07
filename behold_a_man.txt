@@ -22,6 +22,8 @@ TO-RESEARCH: How to represent forks states using only one variable and status co
 	The philosophers left-right fork are just status code,
 	neighboring philosophers should have the same status code for theyr fork
 
+	-philosophers think once they are done sleeping and are waiting to eat
+
 .The main thread is the table
 	Forks are stored in a variable in the table thread
 	The table thread is also the one who will summon everything
