@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:59 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 13:24:36 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:46:30 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ suseconds_t	get_time(void)
 	struct timeval	var;
 
 	gettimeofday(&var, NULL);
-	return (var.tv_usec);
+	return (var.tv_usec + (var.tv_sec * 1000000));
 }

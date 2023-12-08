@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 14:44:58 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:59:21 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 		sim_data->meal_max = ft_abs(ft_atoi(argv[5]));
 	else
 		sim_data->meal_max = -1;
+	sim_data->start_time = get_time();
 	return (0);
 }
 
