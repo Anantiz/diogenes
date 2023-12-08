@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 07:24:37 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:17:20 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
+	data.forks = NULL;
+	data.print_lock = NULL;
 	error = init_shared_resources(&data, argc, argv);
 	if (error < 0)
 		return (1);
@@ -40,10 +42,12 @@ int	main(int argc, char **argv)
 	printf("data.time_to_die:   \t%ld\n", data.sim_data.time_to_die);
 	printf("data.time_to_eat:   \t%ld\n", data.sim_data.time_to_eat);
 	printf("data.time_to_sleep: \t%ld\n", data.sim_data.time_to_sleep);
-	spawn_philosophers(&data);
-	//Create a thread status for error handling if needed
+	// Spawns the philosophers threads
+	if (spawn_philosophers(&data))
+		return (clean_shared(&data), 0);
+	// Create a thread status for error handling if needed
 	i = 0;
 	while (i < data.sim_data.philo_count)
-		pthread_join(data.philosophers_id[i], NULL);
+		pthread_join(data.philosophers_id[i++], NULL);
 	return (clean_shared(&data), 0);
 }

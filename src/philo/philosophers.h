@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 07:18:29 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:27:39 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 typedef struct s_sim_data
 {
 	int				philo_count;
-	unsigned int	meal_count_max;
+	unsigned int	meal_max;
 	suseconds_t		time_to_die;
 	suseconds_t		time_to_eat;
 	suseconds_t		time_to_sleep;
@@ -38,18 +38,26 @@ Forks are a mutex array:
 typedef struct s_table
 {
 	t_sim_data		sim_data;
+	char			*forks_state;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*print_lock;
 	pthread_t		*philosophers_id;
 }t_table_data;
 
-/* N + 1 = (N + 1) % philo_count */
+/*
+N + 1 = (N + 1) % philo_count
+
+As an internal standard:
+	left-fork = this.forks[this.number]
+	right-fork = this.forks[(this.number + 1) % this.number]
+*/
 typedef struct s_philosophers
 {
 	int					number;
 	pthread_t			thread_id;
 	unsigned int		meal_count;
 	suseconds_t			last_meal;
+	char				*forks_state;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*print_lock;
 	const t_sim_data	*sim_data;
@@ -60,6 +68,7 @@ typedef enum e_philo_state
 	FORK,
 	EAT,
 	SLEEP,
+	THINK,
 	DIE
 }t_philo_state;
 
@@ -70,6 +79,7 @@ void		clean_shared(t_table_data *data);
 
 int			spawn_philosophers(t_table_data *data);
 void		*philosopher_routine(void *this);
+int			change_state(t_philo *this, t_philo_state state);
 
 /* Utils */
 
