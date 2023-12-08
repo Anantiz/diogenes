@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 04:47:55 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 05:15:58 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,19 @@ static void	print_invalid_input(void)
 int	main(int argc, char **argv)
 {
 	t_table_data	data;
+	int				error;
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
-	if (init_shared_resources(&data, argc, argv))
-		return (0);
-	printf("data.philo_count:   %d\n", data.sim_data.philo_count);
-	printf("data.time_to_die:   %ld\n", data.sim_data.time_to_die);
-	printf("data.time_to_eat:   %ld\n", data.sim_data.time_to_eat);
-	printf("data.time_to_sleep: %ld\n", data.sim_data.time_to_sleep);
-	// clean_mutexes();
-	return (0);
+	error = init_shared_resources(&data, argc, argv);
+	if (error < 0)
+		return (1);
+	else if (error)
+		return (clean_mutexes(&data), 0);
+	printf("data.philo_count:   \t%d\n", data.sim_data.philo_count);
+	printf("data.time_to_die:   \t%ld\n", data.sim_data.time_to_die);
+	printf("data.time_to_eat:   \t%ld\n", data.sim_data.time_to_eat);
+	printf("data.time_to_sleep: \t%ld\n", data.sim_data.time_to_sleep);
+	spawn_philosophers(&data);
+	return (clean_mutexes(&data), 0);
 }

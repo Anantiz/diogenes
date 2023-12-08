@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   core_handler.c                                     :+:      :+:    :+:   */
+/*   shared_resources.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 04:44:59 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 05:17:35 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 {
 	int	i;
 
+	data->forks = NULL;
+	data->print_lock = NULL;
 	if (init_simu_data(&data->sim_data, argc, argv))
 		return (1);
 	data->forks = ft_calloc(data->sim_data.philo_count,
@@ -44,10 +46,22 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 	while (i < data->sim_data.philo_count)
 		if (pthread_mutex_init(&data->forks[i++], NULL))
 			return (printf("Mutex init failure, abort\n"));
-	data->print_right = ft_calloc(1, sizeof(pthread_mutex_t));
-	if (!data->print_right)
+	data->print_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!data->print_lock)
 		return (-1);
-	if (pthread_mutex_init(data->print_right, NULL))
+	if (pthread_mutex_init(data->print_lock, NULL))
 		return (printf("Mutex init failure, abort\n"));
 	return (0);
+}
+
+void	clean_mutexes(t_table_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->sim_data.philo_count && &data->forks[i] != NULL)
+		pthread_mutex_destroy(&data->forks[i++]);
+	free(data->forks);
+	pthread_mutex_destroy(data->print_lock);
+	free(data->print_lock);
 }

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:59 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 04:42:01 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 06:05:46 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,12 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	if (ptr)
 		memset(ptr, 0, nmemb * size);
 	return (ptr);
+}
+
+suseconds_t	get_time(void)
+{
+	struct timeval	var;
+	
+	gettimeofday(&var, NULL);
+	return (var.tv_usec);
 }

@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/08 04:45:48 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/08 05:44:17 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ BNS_NAME:=philo_bonus
 SRC_PATH:=./src/philo
 BNS_PATH:=./src/philo_bonus
 
-SRC_FILES:= main.c  philosopher.c  state_logs.c  utils.c  core_handler.c
+SRC_FILES:= main.c  philosophers_init.c  philosophers_routine.c\
+	state_logs.c  utils.c  shared_resources.c
 
 SRC_FILES:= $(addprefix $(SRC_PATH)/,$(SRC_FILES))
 SRC_OBJECTS:= $(patsubst %.c,%.o,$(SRC_FILES))
