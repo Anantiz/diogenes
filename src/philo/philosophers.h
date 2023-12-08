@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 06:18:04 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 07:18:29 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,18 @@ typedef struct s_table
 	t_sim_data		sim_data;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*print_lock;
+	pthread_t		*philosophers_id;
 }t_table_data;
 
 /* N + 1 = (N + 1) % philo_count */
 typedef struct s_philosophers
 {
 	int					number;
-	// long				left_fork;
-	// long				right_fork;
+	pthread_t			thread_id;
 	unsigned int		meal_count;
 	suseconds_t			last_meal;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*print_lock;
-	pthread_t			thread_id;
 	const t_sim_data	*sim_data;
 }t_philo;
 
@@ -67,8 +66,9 @@ typedef enum e_philo_state
 /* Core */
 
 int			init_shared_resources(t_table_data *data, int argc, char **argv);
-void		clean_mutexes(t_table_data *data);
+void		clean_shared(t_table_data *data);
 
+int			spawn_philosophers(t_table_data *data);
 void		*philosopher_routine(void *this);
 
 /* Utils */

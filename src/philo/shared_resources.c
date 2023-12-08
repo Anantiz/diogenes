@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 05:17:35 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 07:09:51 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,14 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 		return (-1);
 	if (pthread_mutex_init(data->print_lock, NULL))
 		return (printf("Mutex init failure, abort\n"));
+	data->philosophers_id = ft_calloc(data->sim_data.philo_count, \
+		sizeof(pthread_t *));
+	if (!data->philosophers_id)
+		return (-1);
 	return (0);
 }
 
-void	clean_mutexes(t_table_data *data)
+void	clean_shared(t_table_data *data)
 {
 	int	i;
 
@@ -64,4 +68,5 @@ void	clean_mutexes(t_table_data *data)
 	free(data->forks);
 	pthread_mutex_destroy(data->print_lock);
 	free(data->print_lock);
+	free(data->philosophers_id);
 }
