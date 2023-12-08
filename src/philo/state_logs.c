@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:31:34 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 12:59:12 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:47:29 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	change_state(t_philo *this, t_philo_state state)
 	state_str[1] = "is eating";
 	state_str[2] = "is sleeping";
 	state_str[3] = "is thinking";
-	state_str[4] = "died";
+	state_str[4] = "died *bruh*";
 	error = pthread_mutex_lock(this->print_lock);
 	if (!error)
-		printf("%ld : %d %s\n", get_time(), this->number, state_str[state]);
+		printf("%ld ms : philosopher %d, %s\n", get_time() / 1000, this->number, state_str[state]);
 	else
 		write(2, "Mutext Lock error, aborting\n", 29);
 	pthread_mutex_unlock(this->print_lock);

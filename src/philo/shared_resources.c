@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 14:30:52 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:44:58 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 	if (sim_data->philo_count <= 0)
 		return (printf("number_of_philosophers must be a positive non-zero"
 				"integer\n"));
-	sim_data->time_to_die = ft_abs(ft_atoi(argv[2]));
-	sim_data->time_to_eat = ft_abs(ft_atoi(argv[3]));
-	sim_data->time_to_sleep = ft_abs(ft_atoi(argv[4]));
-	if (argc >= 5)
-		sim_data->meal_max = ft_abs(ft_atoi(argv[4]));
+	sim_data->time_to_die = ft_abs(ft_atoi(argv[2])) * 1000;
+	sim_data->time_to_eat = ft_abs(ft_atoi(argv[3])) * 1000;
+	sim_data->time_to_sleep = ft_abs(ft_atoi(argv[4])) * 1000;
+	if (argc > 5)
+		sim_data->meal_max = ft_abs(ft_atoi(argv[5]));
 	else
 		sim_data->meal_max = -1;
 	return (0);
