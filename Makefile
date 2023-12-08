@@ -6,12 +6,12 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/08 01:34:35 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/08 04:45:48 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC:=gcc
-CFLAGS:=-Wall -Wextra -fsanitize=address -pthread #-Werror
+CFLAGS:=-Wall -Wextra -g3 -fsanitize=address -pthread #-Werror
 RM:=rm -rf
 
 NAME:=philo
@@ -31,12 +31,14 @@ BNS_FILES:= $(addprefix $(BNS_PATH)/,$(BNS_FILES))
 BNS_OBJECTS:= $(patsubst %.c,%.o,$(BNS_FILES))
 
 
-all: $(NAME) bonus
+all: $(NAME)
 
 $(NAME): $(SRC_OBJECTS)
+	@echo Compiling main bin
 	$(CC) $^ $(CFLAGS) -o $@
 
-bonus: $(BONUS_OBJ)
+bonus: $(BNS_OBJECTS)
+	@echo Compiling bonus bin
 	@$(CC) $^ $(CFLAGS) -o $(BNS_NAME)
 
 clean:
