@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/07 22:50:39 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 01:25:03 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ typedef struct s_philosophers
 	int				meal_count;
 	long			left_fork;
 	long			right_fork;
-	unsigned long	last_meal;
+	suseconds_t		last_meal;
+	pthread_mutex_t	*forks_lock;
 	pthread_t		thread_id;
 }t_philo;
 
@@ -41,12 +42,14 @@ typedef struct s_table
 {
 	int				philo_count;
 	int				meal_count_max;
-	unsigned long	time_to_die;
-	unsigned long	time_to_eat;
-	unsigned long	time_to_sleep;
-	unsigned long	forks;
-	pthread_mutex_t	forks_lock;
-}t_table;
+	suseconds_t		time_to_die;
+	suseconds_t		time_to_eat;
+	suseconds_t		time_to_sleep;
+	pthread_mutex_t	*forks_lock;
+}t_table_data;
+
+
+int			init_shared_resources(t_table_data *table_data, int argc, char **argv);
 
 
 #endif

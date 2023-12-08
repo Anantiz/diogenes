@@ -1,0 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
+/*   Updated: 2023/12/08 01:29:04 by aurban           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philosophers.h"
+
+static void	print_invalid_input(void)
+{
+	write(1, "Arguments\n\t"
+	"number_of_philosophers\n\t"
+	"time_to_die   (in mili-seconds)\n\t"
+	"time_to_eat   (in mili-seconds)\n\t"
+	"time_to_sleep (in mili-seconds)\n\n\t"
+	"(potional)number_of_times_each_philosopher_must_eat\n\t\t"
+	"will end the program once each philosophers ate enough", 243);
+}
+
+int	main(int argc, char **argv)
+{
+	t_table_data	table_data;
+
+	if (argc < 4)
+		return (print_invalid_input(), 0);
+	//parse_input(argc, argv);
+	init_shared_resources(&table_data, argc, argv);	
+}
