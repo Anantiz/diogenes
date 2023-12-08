@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 14:48:25 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:10:46 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static int	get_forks(t_philo *this)
 {
 	int	error;
 
-	while (get_time() - this->last_meal <= this->sim_data->time_to_die)
-	{
-		// if (!this->forks_state[this->number] && \
+	// while (get_time() - this->last_meal <= this->sim_data->time_to_die)
+	// {
+		// if (!this->forks_state[this->number] &&
 		// 	!this->forks_state[(this->number + 1) % this->number])
 		// {
 			error = pthread_mutex_lock(&this->forks[this->number]);
@@ -38,8 +38,8 @@ static int	get_forks(t_philo *this)
 			}
 			return (0);
 		// }
-	}
-	return (1);
+	// }
+	// return (1);
 }
 
 void	*philosopher_routine(void *this_)
@@ -58,8 +58,13 @@ void	*philosopher_routine(void *this_)
 			break ;
 		}
 		error = get_forks(this);
-		if (!error)								// Eats
+		if (!error)									// Eats
 		{
+			if (get_time() - this->last_meal <= this->sim_data->time_to_die)
+			{
+				change_state(this, DIE);
+				break ;
+			}
 			error = change_state(this, EAT);
 			if (error)
 			{
