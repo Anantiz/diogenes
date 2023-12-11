@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 12:13:48 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 15:47:42 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_philo	*init_philosopher(t_table_data *data, int i)
 	philo->death = &data->death;
 	philo->forks_state = data->forks_state;
 	philo->forks_state_lock = data->forks_state_lock;
-	philo->last_meal = get_time();
+	philo->wait = &data->wait;
 	return (philo);
 }
 
@@ -39,6 +39,7 @@ int	spawn_philosophers(t_table_data *data)
 	int		i;
 
 	i = 0;
+	data->wait = 1;
 	while (i < data->sim_data.philo_count)
 	{
 		philo = init_philosopher(data, i);
@@ -49,5 +50,6 @@ int	spawn_philosophers(t_table_data *data)
 		data->philosophers_id[i] = philo->thread_id;
 		i++;
 	}
+	data->wait = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 15:59:21 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 15:45:58 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 {
 	int	i;
 
+	data->forks = NULL;
+	data->print_lock = NULL;
+	data->death = 0;
 	if (init_simu_data(&data->sim_data, argc, argv))
 		return (1);
 	data->forks = ft_calloc(data->sim_data.philo_count,
@@ -45,7 +48,9 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 	while (i < data->sim_data.philo_count)
 		if (pthread_mutex_init(&data->forks[i++], NULL))
 			return (printf("Mutex init failure, abort\n"));
-	data->forks_state = ft_calloc(data->sim_data.philo_count, sizeof(char));
+	data->forks_state = ft_calloc(data->sim_data.philo_count, sizeof(int));
+	if (pthread_mutex_init(data->forks_state_lock, NULL))
+		return (printf("Mutex init failure, abort\n"));
 	if (!data->forks_state)
 		return (printf("malloc failure, abort\n"));
 	data->print_lock = ft_calloc(1, sizeof(pthread_mutex_t));
@@ -69,6 +74,7 @@ void	clean_shared(t_table_data *data)
 		pthread_mutex_destroy(&data->forks[i++]);
 	free(data->forks);
 	pthread_mutex_destroy(data->print_lock);
+	pthread_mutex_destroy(data->forks_state_lock);
 	free(data->print_lock);
 	free(data->forks_state);
 	free(data->philosophers_id);

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 12:23:46 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:02:13 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	take_forks(t_philo *this)
 	error = pthread_mutex_lock(&this->forks[this->number]);
 	if (error)
 	{
-		write(2, MUTEX_LOCK_ERROR, MLE_LEN);
+		write(2, MUTEX_LOCK_ERROR"02\n", MLE_LEN + 3);
 		return (-1);
 	}
 	if (change_state(this, FORK))
@@ -30,11 +30,11 @@ static int	take_forks(t_philo *this)
 	if (error)
 	{
 		pthread_mutex_unlock(&this->forks[this->number]);
-		write(2, MUTEX_LOCK_ERROR, MLE_LEN);
+		write(2, MUTEX_LOCK_ERROR"01\n", MLE_LEN + 3);
 		return (-1);
 	}
 	if (change_state(this, FORK))
-		return (mutex_unlocker(this), -1);
+		return (mutex_unlocker(this) - 100);
 	return (0);
 }
 
@@ -48,7 +48,7 @@ static int	get_forks(t_philo *this)
 		error = pthread_mutex_lock(this->forks_state_lock);
 		if (error)
 		{
-			write(2, MUTEX_LOCK_ERROR, MLE_LEN);
+			write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
 			return (-1);
 		}
 		if (this->forks_state[this->number] == 0 && this->forks_state\
@@ -63,41 +63,45 @@ static int	get_forks(t_philo *this)
 		pthread_mutex_unlock(this->forks_state_lock);
 		if (did_i_starve(this))
 			return (STARVED);
-		usleep(1);
 	}
 	return (0);
 }
 
-void	*philosopher_routine(void *this_)
+static int	eat_then_sleep(t_philo *this)
 {
-	t_philo	*this;
+	if (did_i_starve(this))
+	{
+		mutex_unlocker(this);
+		change_state(this, DIE);
+		return (1) ;
+	}
+	if (change_state(this, EAT))
+		return (1) ;
+	usleep(this->sim_data->time_to_eat);	// Dinner Time !
+	this->last_meal = get_time();
+	this->meal_count++;
+	if (mutex_unlocker(this))
+		return (1) ;
+	if (change_state(this, SLEEP))
+		return (1) ;
+	usleep(this->sim_data->time_to_sleep);	// Goes to sleep once done
+	return (0);
+}
+
+static void	routine_loop(t_philo *this)
+{
 	int		error;
 
-	this = this_;
 	while (this->meal_count < this->sim_data->meal_max)
 	{
-		/* Thinks a.k.a wait mode*/
-		error = change_state(this, THINK);
-		if (error)
+		if (change_state(this, THINK))
 			break ;
 		error = get_forks(this);
 		if (!error)									// Eats
 		{
-			if (did_i_starve(this))
-			{
-				mutex_unlocker(this);
-				change_state(this, DIE);
+			if (eat_then_sleep(this))
 				break ;
-			}
-			if (change_state(this, EAT))
-				break ;
-			usleep(this->sim_data->time_to_eat);	// Dinner Time !
-			mutex_unlocker(this);
-			this->last_meal = get_time();
-			this->meal_count++;
-			if (change_state(this, SLEEP))
-				break ;
-			usleep(this->sim_data->time_to_sleep);	// Goes to sleep once done
+
 		}
 		else if (error == STARVED)					// Dies if starving
 		{
@@ -107,5 +111,20 @@ void	*philosopher_routine(void *this_)
 		else
 			break ;
 	}
+	return ;
+}
+
+void	*philosopher_routine(void *this_)
+{
+	t_philo	*this;
+
+	this = this_;
+	if (this->sim_data->philo_count == 1)
+		return (do_one_philo(this), free(this), NULL);
+	while (*(this->wait))
+	{
+	}
+	this->last_meal = get_time();
+	routine_loop(this);
 	return (free(this), NULL);
 }
