@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 16:14:58 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 12:13:48 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ static t_philo	*init_philosopher(t_table_data *data, int i)
 	philo->forks = data->forks;
 	philo->print_lock = data->print_lock;
 	philo->sim_data = (const t_sim_data *)&data->sim_data;
+	philo->death = &data->death;
+	philo->forks_state = data->forks_state;
+	philo->forks_state_lock = data->forks_state_lock;
 	philo->last_meal = get_time();
 	return (philo);
 }

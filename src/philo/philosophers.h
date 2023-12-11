@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 16:02:10 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 12:20:43 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdio.h>
+
+# define STARVED -3
+# define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex"
+# define MLE_LEN 48
 
 /* Read-only after initialization */
 typedef struct s_sim_data
@@ -38,10 +42,12 @@ Forks are a mutex array:
 */
 typedef struct s_table
 {
-	char			*forks_state;
 	t_sim_data		sim_data;
+	char			*forks_state;
+	pthread_mutex_t	*forks_state_lock;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*print_lock;
+	int				death;
 	pthread_t		*philosophers_id;
 }t_table_data;
 
@@ -59,8 +65,10 @@ typedef struct s_philosophers
 	unsigned int		meal_count;
 	suseconds_t			last_meal;
 	char				*forks_state;
+	pthread_mutex_t		*forks_state_lock;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*print_lock;
+	int					*death;
 	const t_sim_data	*sim_data;
 }t_philo;
 
@@ -83,6 +91,9 @@ void		*philosopher_routine(void *this);
 int			change_state(t_philo *this, t_philo_state state);
 
 /* Utils */
+
+void		mutex_unlocker(t_philo *this);
+int			did_i_starve(t_philo *this);
 
 suseconds_t	get_time(void);
 int			ft_atoi(const char *nptr);

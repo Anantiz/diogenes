@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/08 14:17:20 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/11 12:12:36 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	print_invalid_input(void)
 int	main(int argc, char **argv)
 {
 	t_table_data	data;
+	pthread_mutex_t	fork_states_lock;
 	int				error;
 	int				i;
 
@@ -33,16 +34,13 @@ int	main(int argc, char **argv)
 		return (print_invalid_input(), 0);
 	data.forks = NULL;
 	data.print_lock = NULL;
+	data.forks = &fork_states_lock;
+	data.death = 0;
 	error = init_shared_resources(&data, argc, argv);
 	if (error < 0)
 		return (1);
 	else if (error)
 		return (clean_shared(&data), 0);
-	printf("data.philo_count:   \t%d\n", data.sim_data.philo_count);
-	printf("data.time_to_die:   \t%ld\n", data.sim_data.time_to_die);
-	printf("data.time_to_eat:   \t%ld\n", data.sim_data.time_to_eat);
-	printf("data.time_to_sleep: \t%ld\n", data.sim_data.time_to_sleep);
-	// Spawns the philosophers threads
 	if (spawn_philosophers(&data))
 		return (clean_shared(&data), 0);
 	// Create a thread status for error handling if needed
