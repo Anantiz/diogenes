@@ -6,60 +6,119 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 16:02:13 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/12 17:55:33 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-/* Tries to lock both right and left fork for the calling thread */
-static int	take_forks(t_philo *this)
-{
-	int	error;
+// /* Tries to lock both right and left fork for the calling thread */
+// static int	take_forks(t_philo *this)
+// {
+// 	int	error;
 	
-	error = pthread_mutex_lock(&this->forks[this->number]);
-	if (error)
-	{
-		write(2, MUTEX_LOCK_ERROR"02\n", MLE_LEN + 3);
-		return (-1);
-	}
-	if (change_state(this, FORK))
-		return (-1);
-	error = pthread_mutex_lock(&this->forks[(this->number + 1) \
-		% this->sim_data->philo_count]);
-	if (error)
-	{
-		pthread_mutex_unlock(&this->forks[this->number]);
-		write(2, MUTEX_LOCK_ERROR"01\n", MLE_LEN + 3);
-		return (-1);
-	}
-	if (change_state(this, FORK))
-		return (mutex_unlocker(this) - 100);
-	return (0);
-}
+// 	error = pthread_mutex_lock(&this->forks[this->number]);
+// 	if (error)
+// 	{
+// 		write(2, MUTEX_LOCK_ERROR"02\n", MLE_LEN + 3);
+// 		return (-1);
+// 	}
+// 	if (change_state(this, FORK))
+// 		return (-1);
+// 	error = pthread_mutex_lock(&this->forks[(this->number + 1) \
+// 		% this->sim_data->philo_count]);
+// 	if (error)
+// 	{
+// 		pthread_mutex_unlock(&this->forks[this->number]);
+// 		write(2, MUTEX_LOCK_ERROR"01\n", MLE_LEN + 3);
+// 		return (-1);
+// 	}
+// 	if (change_state(this, FORK))
+// 		return (mutex_unlocker(this) - 100);
+// 	return (0);
+// }
 
-//Check if forks are available
+// //Check if forks are available
+// static int	get_forks(t_philo *this)
+// {
+// 	int	error;
+
+// 	while (1)
+// 	{
+// 		error = pthread_mutex_lock(this->forks_state_lock);
+// 		if (error)
+// 		{
+// 			write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
+// 			return (-1);
+// 		}
+// 		if (this->forks_state[this->number] == 0 && this->forks_state\
+// 			[(this->number + 1) % this->sim_data->philo_count] == 0)
+// 		{
+// 			this->forks_state[this->number] = 1;
+// 			this->forks_state[(this->number + 1) % \
+// 				this->sim_data->philo_count] = 1;
+// 			pthread_mutex_unlock(this->forks_state_lock);
+// 			return (take_forks(this));
+// 		}
+// 		pthread_mutex_unlock(this->forks_state_lock);
+// 		if (did_i_starve(this))
+// 			return (STARVED);
+// 	}
+// 	return (0);
+// }
+
 static int	get_forks(t_philo *this)
 {
-	int	error;
+	int	i_have_right;
+	int	i_have_left;
 
+	i_have_right = 0;
+	i_have_left = 0;
 	while (1)
 	{
-		error = pthread_mutex_lock(this->forks_state_lock);
-		if (error)
+		if (pthread_mutex_lock(this->forks_state_lock))
 		{
 			write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
 			return (-1);
 		}
-		if (this->forks_state[this->number] == 0 && this->forks_state\
-			[(this->number + 1) % this->sim_data->philo_count] == 0)
+
+
+		// Left fork
+		if (this->forks_state[this->number] == 0)
 		{
+			i_have_left = 1;
 			this->forks_state[this->number] = 1;
-			this->forks_state[(this->number + 1) % \
-				this->sim_data->philo_count] = 1;
+			if (pthread_mutex_lock(&this->forks[this->number]))
+			{
+				write(2, MUTEX_LOCK_ERROR"89\n", MLE_LEN + 3);
+				if (i_have_right)
+				{
+					this->forks_state[(this->number + 1) % this->sim_data->philo_count] = 0;
+					pthread_mutex_unlock(&this->forks[(this->number + 1) % this->sim_data->philo_count]);
+				}
+				return (-1);
+			}
 			pthread_mutex_unlock(this->forks_state_lock);
-			return (take_forks(this));
 		}
+		
+		// Right fork
+		if (this->forks_state[(this->number + 1) % this->sim_data->philo_count] == 0)
+		{
+			i_have_right = 1;
+			this->forks_state[(this->number + 1) % this->sim_data->philo_count] = 1;
+			if (pthread_mutex_lock(&this->forks[(this->number + 1) % this->sim_data->philo_count]))
+			{
+				if (i_have_left)
+				{
+					this->forks_state[this->number] = 0;
+					pthread_mutex_unlock(&this->forks[this->number]);
+				}
+				write(2, MUTEX_LOCK_ERROR"88\n", MLE_LEN + 3);
+				return (-1);
+			}
+			pthread_mutex_unlock(this->forks_state_lock);
+		}
+
 		pthread_mutex_unlock(this->forks_state_lock);
 		if (did_i_starve(this))
 			return (STARVED);
