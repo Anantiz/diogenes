@@ -6,13 +6,13 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:31:34 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 15:54:41 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 12:39:22 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	mutex_unlocker(t_philo *this)
+int	fork_unlocker(t_philo *this)
 {
 	pthread_mutex_unlock(&this->forks[this->number]);
 	pthread_mutex_unlock(&this->forks[(this->number + 1) % \
@@ -39,6 +39,7 @@ int	did_i_starve(t_philo *this)
 	return (0);
 }
 
+// Handles the special case where there is only one philosopher
 void	do_one_philo(t_philo *this)
 {
 	if (change_state(this, FORK))

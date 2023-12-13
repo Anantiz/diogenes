@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 15:52:21 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 12:39:26 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,10 @@ int			change_state(t_philo *this, t_philo_state state);
 
 /* Utils */
 
-int			mutex_unlocker(t_philo *this);
+int			fork_unlocker(t_philo *this);
 int			did_i_starve(t_philo *this);
 void		do_one_philo(t_philo *this);
+void		ft_usleep(suseconds_t t);
 
 suseconds_t	get_time(void);
 int			ft_atoi(const char *nptr);
