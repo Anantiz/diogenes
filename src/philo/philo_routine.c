@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 12:46:35 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 13:08:41 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,19 @@ void	*philosopher_routine(void *this_)
 		return (do_one_philo(this), free(this), NULL);
 	while (*(this->wait))
 		;
-	usleep(1);
+	if (change_state(this, THINK))
+		return (free(this), NULL) ;
+	if ((this->number + 1) % 2 == 0)
+		ft_usleep((this->sim_data->time_to_eat / 2) + 1);
 	this->last_meal = get_time();
 	routine_loop(this);
 	return (free(this), NULL);
 }
 
 /*
-|0 1 0 0 1 0|
+check_order ->	|N 1 N 3 2 4|
+				|  5	 6  |
+state ->		|0 1 0 0 1 0|
 How do I stop this ?
 
 ---------------------------
@@ -161,3 +166,35 @@ How do I stop this ?
 15 3 died
 */
 
+
+/*
+check_order ->	|1 N 3 2 4 N|
+
+state ->		|1 0 1 1 1 0|
+
+2 4 has taken a fork
+2 4 has taken a fork
+2 4 is eating
+2 1 has taken a fork
+2 1 has taken a fork
+2 1 is eating
+9 4 is sleeping
+9 1 is sleeping
+10 3 has taken a fork
+10 3 has taken a fork
+10 3 is eating
+10 5 has taken a fork
+10 5 has taken a fork
+10 5 is eating
+16 4 is thinking
+16 1 is thinking
+17 1 has taken a fork
+17 1 has taken a fork
+17 1 is eating
+17 3 is sleeping
+17 4 has taken a fork
+17 4 has taken a fork
+17 4 is eating
+17 5 is sleeping
+17 2 died
+*/
