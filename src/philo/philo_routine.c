@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 13:08:41 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:21:12 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,15 @@
 /* Tries to lock both right and left fork for the calling thread */
 static int	take_forks(t_philo *this)
 {
-	int	error;
-	
-	error = pthread_mutex_lock(&this->forks[this->number]);
-	if (error)
+	if (pthread_mutex_lock(&this->forks[this->number]))
 	{
 		write(2, MUTEX_LOCK_ERROR"02\n", MLE_LEN + 3);
 		return (-1);
 	}
 	if (change_state(this, FORK))
 		return (-1);
-	error = pthread_mutex_lock(&this->forks[(this->number + 1) \
-		% this->sim_data->philo_count]);
-	if (error)
+	if (pthread_mutex_lock(&this->forks[(this->number + 1) % \
+		this->sim_data->philo_count]))
 	{
 		pthread_mutex_unlock(&this->forks[this->number]);
 		write(2, MUTEX_LOCK_ERROR"01\n", MLE_LEN + 3);
@@ -41,17 +37,17 @@ static int	take_forks(t_philo *this)
 //Check if forks are available
 static int	get_forks(t_philo *this)
 {
-	int	error;
-
 	while (1)
 	{
-		error = pthread_mutex_lock(this->forks_state_lock);
-		if (error)
+		if (did_i_starve(this))
+			return (STARVED);
+		if (pthread_mutex_lock(this->forks_state_lock))
 		{
 			write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
 			return (-1);
 		}
-		if (this->forks_state[this->number] == 0 && this->forks_state\
+		// Take both forks if available
+		if (this->forks_state[this->number] == 0 && this->forks_state \
 			[(this->number + 1) % this->sim_data->philo_count] == 0)
 		{
 			this->forks_state[this->number] = 1;
@@ -61,8 +57,6 @@ static int	get_forks(t_philo *this)
 			return (take_forks(this));
 		}
 		pthread_mutex_unlock(this->forks_state_lock);
-		if (did_i_starve(this))
-			return (STARVED);
 	}
 	return (0);
 }
@@ -73,24 +67,26 @@ static int	eat_then_sleep(t_philo *this)
 	{
 		fork_unlocker(this);
 		change_state(this, DIE);
-		return (1) ;
+		return (1);
 	}
 	if (change_state(this, EAT))
 		return (1) ;
-	ft_usleep(this->sim_data->time_to_eat);		// Dinner Time !
 	this->last_meal = get_time();
 	this->meal_count++;
+	ft_usleep(NULL, this->sim_data->time_to_eat);		// Dinner Time !
 	if (fork_unlocker(this))
-		return (1) ;
+		return (1);
 	if (change_state(this, SLEEP))
-		return (1) ;
-	ft_usleep(this->sim_data->time_to_sleep);	// Goes to sleep once done
+		return (1);
+	if (ft_usleep(this, this->sim_data->time_to_sleep))	// Goes to sleep once done
+		return (1);
 	return (0);
 }
 
 static void	routine_loop(t_philo *this)
 {
-	int		status;
+	int			status;
+	suseconds_t	think_time;
 
 	while (this->meal_count < this->sim_data->meal_max)
 	{
@@ -99,7 +95,6 @@ static void	routine_loop(t_philo *this)
 		{
 			if (eat_then_sleep(this))
 				break ;
-
 		}
 		else if (status == STARVED)	// Dies if starving
 		{
@@ -108,8 +103,14 @@ static void	routine_loop(t_philo *this)
 		}
 		else
 			break ;
-		if (change_state(this, THINK))
-			break ;
+		think_time = this->sim_data->time_to_die - (this->sim_data->time_to_eat * 2) - (this->sim_data->time_to_sleep);
+		if (think_time > 0)
+		{
+			if (change_state(this, THINK))
+				break ;
+			if (ft_usleep(this, think_time))
+				break ;
+		}
 	}
 	return ;
 }
@@ -119,14 +120,22 @@ void	*philosopher_routine(void *this_)
 	t_philo	*this;
 
 	this = this_;
+	if (this->sim_data->meal_max == 0)
+		return (free(this), NULL);
 	if (this->sim_data->philo_count == 1)
 		return (do_one_philo(this), free(this), NULL);
 	while (*(this->wait))
 		;
 	if (change_state(this, THINK))
-		return (free(this), NULL) ;
+		return (free(this), NULL);
 	if ((this->number + 1) % 2 == 0)
-		ft_usleep((this->sim_data->time_to_eat / 2) + 1);
+	{
+		if (this->sim_data->philo_count % 2 == 1 && \
+			this->number + 1 == this->sim_data->philo_count)
+			ft_usleep(NULL, this->sim_data->time_to_eat);
+		else
+			ft_usleep(NULL, (this->sim_data->time_to_eat / 2));
+	}	
 	this->last_meal = get_time();
 	routine_loop(this);
 	return (free(this), NULL);
@@ -165,8 +174,6 @@ How do I stop this ?
 14 4 is sleeping
 15 3 died
 */
-
-
 /*
 check_order ->	|1 N 3 2 4 N|
 

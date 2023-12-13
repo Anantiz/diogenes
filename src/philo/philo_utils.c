@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:31:34 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 12:39:22 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:08:58 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	fork_unlocker(t_philo *this)
 
 int	did_i_starve(t_philo *this)
 {
-	if (get_time() - this->last_meal >= this->sim_data->time_to_die)
-		return (1) ;
+	if (get_time() - this->last_meal > this->sim_data->time_to_die)
+		return (1);
 	return (0);
 }
 
@@ -75,11 +75,11 @@ int	change_state(t_philo *this, t_philo_state state)
 	{
 		if (*(this->death))
 		{
-			pthread_mutex_unlock(this->print_lock);			
-			return (-2);
+			pthread_mutex_unlock(this->print_lock);
+			return (DEATH_VAL);
 		}
 		time_stamp = (get_time() - this->sim_data->start_time) / 1000;
-		printf("%ld %d %s\n", time_stamp,\
+		printf("%ld %d %s\n", time_stamp, \
 			this->number + 1, state_str[state]);
 		if (state == DIE)
 			*(this->death) = 1;

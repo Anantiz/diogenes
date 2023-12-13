@@ -6,11 +6,21 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 14:37:33 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:32:49 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static void	pre_init_data(t_table_data *data)
+{
+	data->forks = NULL;
+	data->forks_state = NULL;
+	// data->forks_state_lock = NULL;
+	data->philosophers_id = NULL;
+	data->print_lock = NULL;
+	data->death = 0;
+}
 
 static void	print_invalid_input(void)
 {
@@ -31,6 +41,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
+	pre_init_data(&data);
 	error = init_shared_resources(&data, argc, argv);
 	if (error < 0)
 		return (1);
@@ -38,7 +49,6 @@ int	main(int argc, char **argv)
 		return (clean_shared(&data), 0);
 	if (spawn_philosophers(&data))
 		return (clean_shared(&data), 0);
-	// Create a thread status for error handling if needed
 	i = 0;
 	while (i < data.sim_data.philo_count)
 		pthread_join(data.philosophers_id[i++], NULL);

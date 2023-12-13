@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 12:39:26 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:09:19 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define STARVED -3
 # define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex\n"
 # define MLE_LEN 49
+# define DEATH_VAL 6666
 
 /* Read-only after initialization */
 typedef struct s_sim_data
@@ -97,7 +98,7 @@ int			change_state(t_philo *this, t_philo_state state);
 int			fork_unlocker(t_philo *this);
 int			did_i_starve(t_philo *this);
 void		do_one_philo(t_philo *this);
-void		ft_usleep(suseconds_t t);
+int			ft_usleep(t_philo *this, suseconds_t t);
 
 suseconds_t	get_time(void);
 int			ft_atoi(const char *nptr);

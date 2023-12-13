@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:59 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 12:32:13 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:13:23 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,30 @@ suseconds_t	get_time(void)
 	return (var.tv_usec + (var.tv_sec * 1000000));
 }
 
-void	ft_usleep(suseconds_t t)
+int	ft_usleep(t_philo *this, suseconds_t t)
 {
 	suseconds_t		wait_target;
 	suseconds_t		time_now;
 	struct timeval	var;
 
 	wait_target = get_time() + t;
+	while (this != NULL)
+	{
+		gettimeofday(&var, NULL);
+		time_now = var.tv_usec + (var.tv_sec * 1000000);
+		if (time_now - this->last_meal > this->sim_data->time_to_die)
+		{
+			change_state(this, DIE);
+			return (1);
+		}
+		else if (time_now >= wait_target)
+			return (0);
+	}
 	while (1)
 	{
 		gettimeofday(&var, NULL);
 		time_now = var.tv_usec + (var.tv_sec * 1000000);
 		if (time_now >= wait_target)
-			return ;
+			return (0);
 	}
-	// usleep(t);
 }
