@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:59 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 17:13:23 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:32:18 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,24 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 	struct timeval	var;
 
 	wait_target = get_time() + t;
-	while (this != NULL)
+	while (this == NULL)
 	{
 		gettimeofday(&var, NULL);
 		time_now = var.tv_usec + (var.tv_sec * 1000000);
-		if (time_now - this->last_meal > this->sim_data->time_to_die)
-		{
-			change_state(this, DIE);
-			return (1);
-		}
-		else if (time_now >= wait_target)
+		if (time_now >= wait_target)
 			return (0);
 	}
 	while (1)
 	{
 		gettimeofday(&var, NULL);
 		time_now = var.tv_usec + (var.tv_sec * 1000000);
-		if (time_now >= wait_target)
+		if (time_now - this->last_meal > this->sim_data->time_to_die)
+		{
+			write(1, "U DIED MOTHER FUCKA\n", 21);
+			change_state(this, DIE);
+			return (1);
+		}
+		else if (time_now >= wait_target)
 			return (0);
 	}
 }

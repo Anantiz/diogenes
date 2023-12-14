@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/11 15:47:42 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/14 10:22:48 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	spawn_philosophers(t_table_data *data)
 		data->philosophers_id[i] = philo->thread_id;
 		i++;
 	}
+	data->sim_data.start_time = get_time();
 	data->wait = 0;
 	return (0);
 }

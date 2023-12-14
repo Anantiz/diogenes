@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:31:34 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 17:08:58 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/14 12:00:46 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	did_i_starve(t_philo *this)
 // Handles the special case where there is only one philosopher
 void	do_one_philo(t_philo *this)
 {
+	
 	if (change_state(this, FORK))
 		return ;
 	usleep(this->sim_data->time_to_die);
@@ -70,6 +71,7 @@ int	change_state(t_philo *this, t_philo_state state)
 	int			error;
 
 	init_states_cuz_shitty_norm(state_str);
+	time_stamp = (get_time() - this->sim_data->start_time) / 1000;
 	error = pthread_mutex_lock(this->print_lock);
 	if (!error)
 	{
@@ -78,7 +80,6 @@ int	change_state(t_philo *this, t_philo_state state)
 			pthread_mutex_unlock(this->print_lock);
 			return (DEATH_VAL);
 		}
-		time_stamp = (get_time() - this->sim_data->start_time) / 1000;
 		printf("%ld %d %s\n", time_stamp, \
 			this->number + 1, state_str[state]);
 		if (state == DIE)

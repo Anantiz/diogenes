@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 17:32:49 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:45:43 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	pre_init_data(t_table_data *data)
 {
 	data->forks = NULL;
 	data->forks_state = NULL;
-	// data->forks_state_lock = NULL;
 	data->philosophers_id = NULL;
 	data->print_lock = NULL;
 	data->death = 0;
@@ -47,6 +46,7 @@ int	main(int argc, char **argv)
 		return (1);
 	else if (error)
 		return (clean_shared(&data), 0);
+	printf("TTD: %ld\n", data.sim_data.time_to_die);
 	if (spawn_philosophers(&data))
 		return (clean_shared(&data), 0);
 	i = 0;

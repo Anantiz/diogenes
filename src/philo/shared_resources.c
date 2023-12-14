@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 17:32:19 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/14 10:35:01 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 		sim_data->meal_max = ft_abs(ft_atoi(argv[5]));
 	else
 		sim_data->meal_max = -1;
-	sim_data->start_time = get_time();
 	return (0);
 }
 
@@ -55,7 +54,8 @@ int	init_shared_resources(t_table_data *data, int argc, char **argv)
 		return (-1);
 	if (pthread_mutex_init(data->print_lock, NULL))
 		return (printf("Mutex init failure, abort\n"));
-	data->philosophers_id = ft_calloc(data->sim_data.philo_count, \
+	data->philosophers_id = ft_calloc(data->
+	sim_data.philo_count, \
 		sizeof(pthread_t *));
 	if (!data->philosophers_id)
 		return (-1);
