@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:14:41 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:50:00 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void	print_invalid_input(void)
 		"time_to_eat   (in mili-seconds)\n\t"
 		"time_to_sleep (in mili-seconds)\n\n\t"
 		"(optional)number_of_times_each_philosopher_must_eat\n\t"
-		"  will end the program once each philosophers ate enough\n", 246);
+		"  will end the program once each philosophers ate enough\n\n"
+		"Invalid arguments will be assumed to be 0\n", 289);
 }
 
 int	main(int argc, char **argv)
