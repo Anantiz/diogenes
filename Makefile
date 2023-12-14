@@ -6,22 +6,23 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/12 17:54:41 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/14 23:51:40 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC:=gcc
-CFLAGS:=-Wall -Wextra -g3 -fsanitize=address -pthread #-Werror
+CFLAGS:=-Wall -Werror -Wextra -pthread -g3 -fsanitize=address
 RM:=rm -rf
 
 NAME:=philo
 BNS_NAME:=philo_bonus
 
-SRC_PATH:=./src/philo
+SRC_PATH:=./src/philo2
 BNS_PATH:=./src/philo_bonus
 
 SRC_FILES:= main.c  philo_init.c  philo_routine.c\
-	philo_utils.c  utils.c  shared_resources.c  #soup_forks.c
+	philo_utils.c  utils.c  shared_resources.c \
+	change_states.c  philo_routine_forks.c
 
 SRC_FILES:= $(addprefix $(SRC_PATH)/,$(SRC_FILES))
 SRC_OBJECTS:= $(patsubst %.c,%.o,$(SRC_FILES))
