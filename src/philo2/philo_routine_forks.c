@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_routine_fork.c                               :+:      :+:    :+:   */
+/*   philo_routine_forks.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:06:58 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:47:21 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	take_forks_error(t_philo *this, int status)
 {
 	if (status == 1)
-		write (2, "AAAAA (philo_routine_forks 01)\n", 32);
+		write (2, "AAAAA MUTEX ERROR (philo_routine_forks 01)\n", 44);
 	else if (status == 2)
-		write (2, "AAAAA (philo_routine_forks 02)\n", 32);
+		write (2, "AAAAA MUTEX ERROR (philo_routine_forks 02)\n", 44);
 	if (!pthread_mutex_lock(this->shared->forks_state_lock))
 	{
 		this->shared->forks_state[this->number] = 0;

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:07:00 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:20:05 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ void	clean_shared(t_shared *shared)
 	i = 0;
 	while (shared->forks && i < shared->sim_data.philo_count \
 		&& &shared->forks[i] != NULL)
+	{
 		pthread_mutex_destroy(&shared->forks[i++]);
+	}
 	free(shared->forks);
 	free(shared->forks_state);
 	free(shared->philosophers_id);

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:06:59 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:45:02 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	eat_then_sleep(t_philo *this)
 			return (1);
 		if (ft_usleep(this, this->shared->sim_data.time_to_sleep))
 			return (1);
+		// change_state(this, WOKE);
 	}
 	return (0);
 }

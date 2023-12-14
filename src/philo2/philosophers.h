@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:07:00 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:44:54 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ As an internal standard:
 */
 typedef struct s_philosophers
 {
-	int			number;
-	int			meal_count;
-	suseconds_t	last_meal;
-	t_shared	*shared;
+	int				number;
+	unsigned int	meal_count;
+	suseconds_t		last_meal;
+	t_shared		*shared;
 }t_philo;
 
 typedef enum e_philo_state
@@ -74,10 +74,13 @@ typedef enum e_philo_state
 	EAT,
 	SLEEP,
 	THINK,
-	DIE
+	DIE,
+	// WOKE,
 }t_philo_state;
 
 /* Core */
+int			init_shared_resources(t_shared *shared, int argc, char **argv);
+void		clean_shared(t_shared *shared);
 int			spawn_philosophers(t_shared *shared);
 // Routine
 void		*philosopher_routine(void *this_);
