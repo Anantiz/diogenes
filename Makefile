@@ -6,18 +6,18 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/15 00:48:33 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/15 11:49:12 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC:=gcc
-CFLAGS:=-Wall -Werror -Wextra -pthread -g3 #-fsanitize=address
+CFLAGS:=-Wall -Werror -Wextra -pthread -g3 -fsanitize=thread
 RM:=rm -rf
 
 NAME:=philo
 BNS_NAME:=philo_bonus
 
-SRC_PATH:=./src/philo2
+SRC_PATH:=./src/philo
 BNS_PATH:=./src/philo_bonus
 
 SRC_FILES:= main.c  philo_init.c  philo_routine.c\

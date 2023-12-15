@@ -6,14 +6,14 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/14 10:22:48 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:17:25 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 /* Initialize the philosopher struct */
-static t_philo	*init_philosopher(t_table_data *data, int i)
+static t_philo	*init_philosopher(t_shared *shared, int i)
 {
 	t_philo		*philo;
 
@@ -22,35 +22,28 @@ static t_philo	*init_philosopher(t_table_data *data, int i)
 		return (NULL);
 	philo->number = i;
 	philo->meal_count = 0;
-	philo->forks = data->forks;
-	philo->print_lock = data->print_lock;
-	philo->sim_data = (const t_sim_data *)&data->sim_data;
-	philo->death = &data->death;
-	philo->forks_state = data->forks_state;
-	philo->forks_state_lock = data->forks_state_lock;
-	philo->wait = &data->wait;
+	philo->shared = shared;
 	return (philo);
 }
 
 /* Spawns philo_count threads */
-int	spawn_philosophers(t_table_data *data)
+int	spawn_philosophers(t_shared *shared)
 {
 	t_philo	*philo;
 	int		i;
 
 	i = 0;
-	data->wait = 1;
-	while (i < data->sim_data.philo_count)
+	shared->wait = 1;
+	while (i < shared->sim_data.philo_count)
 	{
-		philo = init_philosopher(data, i);
+		philo = init_philosopher(shared, i);
 		if (!philo)
 			return (-1);
-		if (pthread_create(&philo->thread_id, NULL, philosopher_routine, philo))
+		if (pthread_create(&shared->philosophers_id[i], NULL, philosopher_routine, philo))
 			return (-2);
-		data->philosophers_id[i] = philo->thread_id;
 		i++;
 	}
-	data->sim_data.start_time = get_time();
-	data->wait = 0;
+	shared->sim_data.start_time = get_time();
+	shared->wait = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/13 17:09:19 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:44:54 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define STARVED -3
 # define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex\n"
 # define MLE_LEN 49
-# define DEATH_VAL 6666
+# define DEATH_VAL 666
 
 /* Read-only after initialization */
 typedef struct s_sim_data
@@ -41,17 +41,17 @@ Forks are a mutex array:
 	A locked mutex means a used fork
 	An available mutex means an available fork
 */
-typedef struct s_table
+typedef struct s_shared
 {
 	int				death;
 	int				wait;
-	int				*forks_state;
 	t_sim_data		sim_data;
+	int				*forks_state;
 	pthread_mutex_t	*forks_state_lock;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*print_lock;
 	pthread_t		*philosophers_id;
-}t_table_data;
+}t_shared;
 
 /*
 N + 1 = (N + 1) % philo_count
@@ -62,17 +62,10 @@ As an internal standard:
 */
 typedef struct s_philosophers
 {
-	int					number;
-	int					*death;
-	int					*forks_state;
-	const int			*wait;
-	pthread_t			thread_id;
-	suseconds_t			last_meal;
-	unsigned int		meal_count;
-	pthread_mutex_t		*forks_state_lock;
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		*print_lock;
-	const t_sim_data	*sim_data;
+	int				number;
+	unsigned int	meal_count;
+	suseconds_t		last_meal;
+	t_shared		*shared;
 }t_philo;
 
 typedef enum e_philo_state
@@ -81,24 +74,27 @@ typedef enum e_philo_state
 	EAT,
 	SLEEP,
 	THINK,
-	DIE
+	DIE,
+	// WOKE,
 }t_philo_state;
 
 /* Core */
+int			init_shared_resources(t_shared *shared, int argc, char **argv);
+void		clean_shared(t_shared *shared);
+int			spawn_philosophers(t_shared *shared);
+// Routine
+void		*philosopher_routine(void *this_);
+int			get_forks(t_philo *this);
 
-int			init_shared_resources(t_table_data *data, int argc, char **argv);
-void		clean_shared(t_table_data *data);
+/* Philo Utils */
 
-int			spawn_philosophers(t_table_data *data);
-void		*philosopher_routine(void *this);
 int			change_state(t_philo *this, t_philo_state state);
-
-/* Utils */
-
-int			fork_unlocker(t_philo *this);
 int			did_i_starve(t_philo *this);
+int			fork_unlocker(t_philo *this);
 void		do_one_philo(t_philo *this);
 int			ft_usleep(t_philo *this, suseconds_t t);
+
+/* GLOBAL UTILS*/
 
 suseconds_t	get_time(void);
 int			ft_atoi(const char *nptr);
