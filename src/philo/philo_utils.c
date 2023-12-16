@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:44:00 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/16 17:55:21 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	do_one_philo(t_philo *this)
 	return ;
 }
 
-static suseconds_t	ft_polish(suseconds_t a, suseconds_t b)
+static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
 	{
@@ -79,7 +79,7 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 		if (time_now >= wait_target)
 			return (0);
 	}
-	usleep((int)ft_polish(t, this->shared->sim_data.time_to_die));
+	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die));
 	while (1)
 	{
 		gettimeofday(&var, NULL);

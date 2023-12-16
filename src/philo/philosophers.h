@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:44:54 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/16 17:59:11 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 # include <stdio.h>
 
-# define STARVED -3
+# define STARVED -8798
 # define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex\n"
 # define MLE_LEN 49
 # define DEATH_VAL 666

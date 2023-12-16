@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:17:25 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/16 17:27:32 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	spawn_philosophers(t_shared *shared)
 	int		i;
 
 	i = 0;
+	pthread_mutex_lock(shared->forks_state_lock);
 	shared->wait = 1;
+	pthread_mutex_unlock(shared->forks_state_lock);
 	while (i < shared->sim_data.philo_count)
 	{
 		philo = init_philosopher(shared, i);
@@ -44,6 +46,8 @@ int	spawn_philosophers(t_shared *shared)
 		i++;
 	}
 	shared->sim_data.start_time = get_time();
+	pthread_mutex_lock(shared->forks_state_lock);
 	shared->wait = 0;
+	pthread_mutex_unlock(shared->forks_state_lock);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:47:21 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/16 18:00:15 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	take_forks(t_philo *this)
 	if (change_state(this, FORK))
 	{
 		pthread_mutex_unlock(&this->shared->forks[this->number]);
-		return (take_forks_error(this, 1), -1);
+		return (take_forks_error(this, 0), -1);
 	}
 
 	// Right Fork
@@ -57,7 +57,7 @@ static int	take_forks(t_philo *this)
 		return (take_forks_error(this, 2), -1);
 	}
 	if (change_state(this, FORK))
-		return (take_forks_error(this, 2), fork_unlocker(this) - 100);
+		return (take_forks_error(this, 0), (fork_unlocker(this) * 0) - 1);
 	return (0);
 }
 
@@ -83,5 +83,4 @@ int	get_forks(t_philo *this)
 		}
 		pthread_mutex_unlock(this->shared->forks_state_lock);
 	}
-	return (0);
 }

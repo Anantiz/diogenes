@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:45:02 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/16 17:53:51 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	eat_then_sleep(t_philo *this)
 	
 	// EAT
 	if (change_state(this, EAT))
-		return (1) ;
+		return (fork_unlocker(this) * 0 + 1) ;
 	this->last_meal = get_time();
 	this->meal_count++;
 	if (ft_usleep(this, this->shared->sim_data.time_to_eat))
@@ -32,7 +32,6 @@ static int	eat_then_sleep(t_philo *this)
 			return (1);
 		if (ft_usleep(this, this->shared->sim_data.time_to_sleep))
 			return (1);
-		// change_state(this, WOKE);
 	}
 	return (0);
 }
@@ -63,6 +62,7 @@ static void	routine_loop(t_philo *this)
 		else if (status == STARVED)
 		{
 			// DIE
+			write(2, "DEATH 1\n", 9);
 			change_state(this, DIE);
 			break ;
 		}
@@ -88,8 +88,23 @@ static void	routine_loop(t_philo *this)
 void	*philosopher_routine(void *this_)
 {
 	t_philo	*this;
+	int		wait;
 
 	this = this_;
+	
+	// WAITS	
+	wait = 1;
+	while (wait)
+	{
+		pthread_mutex_lock(this->shared->forks_state_lock);
+		if (this->shared->wait == 0)
+		{
+			pthread_mutex_unlock(this->shared->forks_state_lock);
+			break ;
+		}
+		pthread_mutex_unlock(this->shared->forks_state_lock);
+	}
+		
 	// HANDLES SPECIAL CASES
 	if (this->shared->sim_data.meal_max == 0)
 		return (free(this), NULL);
@@ -97,8 +112,6 @@ void	*philosopher_routine(void *this_)
 		return (do_one_philo(this), free(this), NULL);
 	
 	// SYNCHRONISE
-	while (this->shared->wait)
-		;
 	if ((this->number + 1) % 2 == 0)
 	{
 		if (this->shared->sim_data.philo_count % 2 == 1 && \
@@ -106,7 +119,7 @@ void	*philosopher_routine(void *this_)
 			ft_usleep(NULL, this->shared->sim_data.time_to_eat);
 		else
 			ft_usleep(NULL, (this->shared->sim_data.time_to_eat / 2));
-	}	
+	}
 
 	// START ROUTINE
 	this->last_meal = get_time();
