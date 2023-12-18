@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 17:20:34 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 20:52:49 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,19 @@ int	forks_lock(t_philo *this, int status)
 {
 	if (status)
 	{
+		pthread_mutex_lock(this->shared->one_to_rule_them_all);
 		if (pthread_mutex_lock(&this->shared->forks_lock[this->number]))
+		{
+			pthread_mutex_unlock(this->shared->one_to_rule_them_all);
 			return (-1);
+		}
 		if (pthread_mutex_lock(&this->shared->forks_lock[(this->number + 1) % \
 			this->shared->sim_data.philo_count]))
 		{
 			pthread_mutex_unlock(&this->shared->forks_lock[this->number]);
 			return (-1);
 		}
+		pthread_mutex_unlock(this->shared->one_to_rule_them_all);
 	}
 	else
 	{

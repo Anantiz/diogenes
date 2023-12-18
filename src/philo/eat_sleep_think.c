@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 13:39:20 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 17:31:15 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 20:55:11 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ int	eat_then_sleep(t_philo *this)
 	this->last_meal = get_time();
 	this->meal_count++;
 	if (ft_usleep(this, this->shared->sim_data.time_to_eat))
-		return (1);
+		return (-1);
 	if (release_forks(this))
-		return (1);
+		return (-1);
 	if (this->shared->sim_data.time_to_sleep > 0)
 	{
 		if (change_state(this, SLEEP))
-			return (1);
+			return (-1);
 		if (ft_usleep(this, this->shared->sim_data.time_to_sleep))
-			return (1);
+			return (-1);
 	}
 	return (0);
 }

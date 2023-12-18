@@ -6,18 +6,19 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/17 21:12:14 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 19:50:57 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-static int	think_time(t_philo *this)
+static int	think(t_philo *this)
 {
 	long	think_time;
 
-	think_time = ((this->shared->sim_data.time_to_die - \
-		this->shared->sim_data.time_to_eat * 2) - \
+	think_time = ((this->shared->sim_data.time_to_die -\
+		this->shared->sim_data.time_to_eat *\
+		(2 + (this->shared->sim_data.philo_count % 2))) -\
 		(this->shared->sim_data.time_to_sleep));
 	if (think_time > 0)
 	{
@@ -48,7 +49,7 @@ static void	routine_loop(t_philo *this)
 		}
 		else
 			break ;
-		if (think_time(this))
+		if (think(this))
 			break ;
 	}
 	return ;

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 17:01:47 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 20:28:16 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ void	*philosopher_routine(void *this_)
 	t_philo	*this;
 
 	this = this_;
-	wait_others(this);
 	if (this->shared->sim_data.meal_max == 0)
 		return (free(this), NULL);
 	if (this->shared->sim_data.philo_count == 1)
 		return (do_one_philo(this), free(this), NULL);
+	wait_others(this);
 	this->last_meal = get_time();
 	if ((this->number + 1) % 2 == 0)
 	{

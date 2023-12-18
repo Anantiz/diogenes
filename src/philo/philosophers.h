@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 17:23:15 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 20:36:14 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_shared
 	int				*forks_state;
 	pthread_mutex_t	*forks_lock;
 	pthread_mutex_t	*print_lock;
+	pthread_mutex_t	*one_to_rule_them_all;
 	pthread_t		*philosophers_id;
 }t_shared;
 
