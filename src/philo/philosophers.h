@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/16 17:59:11 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:44:01 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ typedef struct s_shared
 	int				wait;
 	t_sim_data		sim_data;
 	int				*forks_state;
-	pthread_mutex_t	*forks_state_lock;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	*forks_lock;
 	pthread_mutex_t	*print_lock;
 	pthread_t		*philosophers_id;
 }t_shared;
@@ -78,27 +77,32 @@ typedef enum e_philo_state
 	// WOKE,
 }t_philo_state;
 
-/* Core */
+/* Core -----------------------------------------*/
 int			init_shared_resources(t_shared *shared, int argc, char **argv);
 void		clean_shared(t_shared *shared);
 int			spawn_philosophers(t_shared *shared);
 // Routine
 void		*philosopher_routine(void *this_);
+// Forks
 int			get_forks(t_philo *this);
+int			forks_lock(t_philo *this, int status);
+int			release_forks(t_philo *this);
+// States
+int			eat_then_sleep(t_philo *this);
+int			think(t_philo *this);
 
-/* Philo Utils */
+/* Philo Utils ----------------------------------*/
 
-int			change_state(t_philo *this, t_philo_state state);
-int			did_i_starve(t_philo *this);
-int			fork_unlocker(t_philo *this);
 void		do_one_philo(t_philo *this);
+int			did_i_starve(t_philo *this);
 int			ft_usleep(t_philo *this, suseconds_t t);
+int			change_state(t_philo *this, t_philo_state state);
 
-/* GLOBAL UTILS*/
+/* GLOBAL UTILS ---------------------------------*/
 
 suseconds_t	get_time(void);
-int			ft_atoi(const char *nptr);
 int			ft_abs(int n);
+int			ft_atoi(const char *nptr);
 void		*ft_calloc(size_t nmemb, size_t size);
 
 #endif

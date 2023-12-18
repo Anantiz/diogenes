@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:51:58 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 11:49:31 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:22:41 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	init_states_cuz_shitty_norm(char *state_str[])
 	state_str[2] = "is sleeping";
 	state_str[3] = "is thinking";
 	state_str[4] = "died";
-	// state_str[5] = "woke up";
 }
 
 int	change_state(t_philo *this, t_philo_state state)

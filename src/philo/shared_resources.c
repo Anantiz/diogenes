@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/15 00:20:05 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 12:15:04 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,18 @@ int	init_shared_resources(t_shared *shared, int argc, char **argv)
 
 	if (init_simu_data(&shared->sim_data, argc, argv))
 		return (1);
-		
-	// INIT PRINT LOCK
 	if (pthread_mutex_init(shared->print_lock, NULL))
 		return (-printf("Mutex init failure, abort\n"));
-
-	// INIT FORKS
-	shared->forks = ft_calloc(shared->sim_data.philo_count + 1,	sizeof(pthread_mutex_t));
-	if (!shared->forks)
+	shared->forks_lock = ft_calloc(shared->sim_data.philo_count + 1,	sizeof(pthread_mutex_t));
+	if (!shared->forks_lock)
 		return (-1);
 	i = 0;
 	while (i < shared->sim_data.philo_count)
-		if (pthread_mutex_init(&shared->forks[i++], NULL))
+		if (pthread_mutex_init(&shared->forks_lock[i++], NULL))
 			return (printf("Mutex init failure, abort\n"));
-			
-	// INIT FORKS STATE
 	shared->forks_state = ft_calloc(shared->sim_data.philo_count, sizeof(int));
 	if (!shared->forks_state)
 		return (printf("malloc failure, abort\n"));
-	if (pthread_mutex_init(shared->forks_state_lock, NULL))
-		return (printf("Mutex init failure, abort\n"));
-	
-	// INIT PHILO-ID LIST
 	shared->philosophers_id = ft_calloc(shared->sim_data.philo_count, sizeof(pthread_t *));
 	if (!shared->philosophers_id)
 		return (-1);
@@ -69,16 +59,14 @@ void	clean_shared(t_shared *shared)
 	int	i;
 
 	i = 0;
-	while (shared->forks && i < shared->sim_data.philo_count \
-		&& &shared->forks[i] != NULL)
+	while (shared->forks_lock && i < shared->sim_data.philo_count \
+		&& &shared->forks_lock[i] != NULL)
 	{
-		pthread_mutex_destroy(&shared->forks[i++]);
+		pthread_mutex_destroy(&shared->forks_lock[i++]);
 	}
-	free(shared->forks);
+	free(shared->forks_lock);
 	free(shared->forks_state);
 	free(shared->philosophers_id);
 	if (shared->print_lock)
 		pthread_mutex_destroy(shared->print_lock);
-	if (shared->forks_state_lock)
-		pthread_mutex_destroy(shared->forks_state_lock);
 }

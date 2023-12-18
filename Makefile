@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/16 18:15:59 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/18 13:43:16 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ BNS_PATH:=./src/philo_bonus
 
 SRC_FILES:= main.c  philo_init.c  philo_routine.c\
 	philo_utils.c  utils.c  shared_resources.c \
-	change_states.c  philo_routine_forks.c
+	change_states.c  eat_sleep_think.c forks.c
 
 SRC_FILES:= $(addprefix $(SRC_PATH)/,$(SRC_FILES))
 SRC_OBJECTS:= $(patsubst %.c,%.o,$(SRC_FILES))

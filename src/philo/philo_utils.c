@@ -6,31 +6,11 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/16 17:55:21 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:30:11 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-int	fork_unlocker(t_philo *this)
-{
-	pthread_mutex_unlock(&this->shared->forks[this->number]);
-	pthread_mutex_unlock(&this->shared->forks[(this->number + 1) % \
-		this->shared->sim_data.philo_count]);
-	if (!pthread_mutex_lock(this->shared->forks_state_lock))
-	{
-		this->shared->forks_state[this->number] = 0;
-		this->shared->forks_state[(this->number + 1) % \
-			this->shared->sim_data.philo_count] = 0;
-		pthread_mutex_unlock(this->shared->forks_state_lock);
-		return (0);
-	}
-	else
-	{
-		write(2, MUTEX_LOCK_ERROR"08\n", MLE_LEN + 3);
-		return (-1);
-	}
-}
 
 int	did_i_starve(t_philo *this)
 {
@@ -42,7 +22,7 @@ int	did_i_starve(t_philo *this)
 // Handles the special case where there is only one philosopher
 void	do_one_philo(t_philo *this)
 {
-	
+
 	if (change_state(this, FORK))
 		return ;
 	usleep(this->shared->sim_data.time_to_die);
