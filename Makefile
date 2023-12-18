@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/18 13:43:16 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/18 16:45:53 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,13 +27,15 @@ SRC_FILES:= main.c  philo_init.c  philo_routine.c\
 SRC_FILES:= $(addprefix $(SRC_PATH)/,$(SRC_FILES))
 SRC_OBJECTS:= $(patsubst %.c,%.o,$(SRC_FILES))
 
-BNS_FILES:= main_bonus.c
+BNS_FILES:= main_bonus.c change_states_bonus.c eat_sleep_bonus.c\
+	philo_init_bonus.c philo_routine_bonus.c philo_utils_bonus.c\
+	shared_resources_bonus.c utils_bonus.c
 
 BNS_FILES:= $(addprefix $(BNS_PATH)/,$(BNS_FILES))
 BNS_OBJECTS:= $(patsubst %.c,%.o,$(BNS_FILES))
 
 
-all: $(NAME)
+all: $(NAME) bonus
 
 $(NAME): $(SRC_OBJECTS)
 	@echo Compiling main bin

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 13:37:59 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:20:34 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ int	get_forks(t_philo *this)
 			return (STARVED);
 		if (forks_lock(this, 1))
 			return (-1);
-		if (this->shared->forks_state[this->number] == 0 && this->shared->forks_state \
-			[(this->number + 1) % this->shared->sim_data.philo_count] == 0)
+		if (this->shared->forks_state[this->number] == 0 && \
+			this->shared->forks_state[(this->number + 1) % \
+			this->shared->sim_data.philo_count] == 0)
 		{
 			this->shared->forks_state[this->number] = 1;
 			this->shared->forks_state[(this->number + 1) % \

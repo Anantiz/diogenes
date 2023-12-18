@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 13:30:52 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:23:26 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	spawn_philosophers(t_shared *shared)
 		philo = init_philosopher(shared, i);
 		if (!philo)
 			return (-1);
-		if (pthread_create(&shared->philosophers_id[i], NULL, philosopher_routine, philo))
+		if (pthread_create(&shared->philosophers_id[i], \
+			NULL, philosopher_routine, philo))
 			return (-2);
 		i++;
 	}

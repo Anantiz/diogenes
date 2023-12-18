@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 13:30:11 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:22:31 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	did_i_starve(t_philo *this)
 // Handles the special case where there is only one philosopher
 void	do_one_philo(t_philo *this)
 {
-
 	if (change_state(this, FORK))
 		return ;
 	usleep(this->shared->sim_data.time_to_die);
@@ -52,13 +51,6 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 	struct timeval	var;
 
 	wait_target = get_time() + t;
-	while (this == NULL)
-	{
-		gettimeofday(&var, NULL);
-		time_now = var.tv_usec + (var.tv_sec * 1000000);
-		if (time_now >= wait_target)
-			return (0);
-	}
 	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die));
 	while (1)
 	{

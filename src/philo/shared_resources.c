@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 12:15:04 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:23:05 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	init_shared_resources(t_shared *shared, int argc, char **argv)
 		return (1);
 	if (pthread_mutex_init(shared->print_lock, NULL))
 		return (-printf("Mutex init failure, abort\n"));
-	shared->forks_lock = ft_calloc(shared->sim_data.philo_count + 1,	sizeof(pthread_mutex_t));
+	shared->forks_lock = ft_calloc(shared->sim_data.philo_count + 1, \
+		sizeof(pthread_mutex_t));
 	if (!shared->forks_lock)
 		return (-1);
 	i = 0;
@@ -48,7 +49,8 @@ int	init_shared_resources(t_shared *shared, int argc, char **argv)
 	shared->forks_state = ft_calloc(shared->sim_data.philo_count, sizeof(int));
 	if (!shared->forks_state)
 		return (printf("malloc failure, abort\n"));
-	shared->philosophers_id = ft_calloc(shared->sim_data.philo_count, sizeof(pthread_t *));
+	shared->philosophers_id = ft_calloc(shared->sim_data.philo_count, \
+		sizeof(pthread_t *));
 	if (!shared->philosophers_id)
 		return (-1);
 	return (0);

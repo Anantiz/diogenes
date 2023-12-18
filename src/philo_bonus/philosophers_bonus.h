@@ -6,12 +6,12 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/17 21:04:54 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:20:10 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#ifndef PHILOSOPHERS_BONUS_H
+# define PHILOSOPHERS_BONUS_H
 
 # include <unistd.h>
 # include <pthread.h>

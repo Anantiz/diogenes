@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/17 21:09:18 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:46:54 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	init_shared_resources(t_shared *shared, int argc, char **argv)
 	if (init_simu_data(&shared->sim_data, argc, argv))
 		return (1);
 	if (pthread_mutex_init(shared->print_lock, NULL))
-		return (-printf("Mutex init failure, abort\n"));
 		return (printf("Mutex init failure, abort\n"));
 	shared->philosophers_id = ft_calloc(shared->sim_data.philo_count, \
 		sizeof(pthread_t *));

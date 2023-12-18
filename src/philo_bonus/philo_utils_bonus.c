@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   philo_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/17 13:54:36by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:21:33 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,30 @@ void	do_one_philo(t_philo *this)
 	return ;
 }
 
-static suseconds_t get_sleep_time(suseconds_t a, suseconds_t b, int count)
+static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
 	{
-		a -= count / 15;
+		a -= 1;
 		if (a < 0)
 			return (0);
 		return (a);
 	}
-	b -= count / 15;
+	b -= 1;
 	if (b < 0)
 		return (0);
 	return (b);
 }
 
-int ft_usleep(t_philo *this, suseconds_t t)
+int	ft_usleep(t_philo *this, suseconds_t t)
 {
-	suseconds_t wait_target;
-	suseconds_t time_now;
-	struct timeval var;
-	suseconds_t time_die;
+	suseconds_t		wait_target;
+	suseconds_t		time_now;
+	struct timeval	var;
+	suseconds_t		time_die;
 
 	wait_target = get_time() + t;
-	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die, this->shared->sim_data.philo_count));
+	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die));
 	time_die = this->shared->sim_data.time_to_die + this->last_meal;
 	while (1)
 	{

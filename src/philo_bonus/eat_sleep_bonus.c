@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/17 21:36:01 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:46:33 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int	fork_unlocker(t_philo *this)
 static int	shall_i_eat(t_philo *this)
 {
 	if (this)
+	{
+		return (1);
+	}
+	return (0);
 }
 
 int	get_forks(t_philo *this)
