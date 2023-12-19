@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:56:59 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:08:04 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define MLE_LEN 49
 # define DEATH_VAL 666
 
-/* Read-only after initialization */
+/* Read-only once initialized */
 typedef struct s_sim_data
 {
 	int				philo_count;
@@ -43,6 +43,7 @@ Forks are a mutex array:
 */
 typedef struct s_shared
 {
+	//Don't forget to change makefile because of idiots
 	int				death;
 	int				wait;
 	volatile int	forks_count;

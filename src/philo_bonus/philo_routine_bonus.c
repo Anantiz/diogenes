@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:57:19 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:30:43 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static int	think(t_philo *this)
 {
 	long	think_time;
 
-	think_time = ((this->shared->sim_data.time_to_die -\
-		this->shared->sim_data.time_to_eat *\
-		(2 + (this->shared->sim_data.philo_count % 2))) -\
-		(this->shared->sim_data.time_to_sleep));
+		think_time = this->shared->sim_data.time_to_eat - \
+			this->shared->sim_data.time_to_sleep - 5;
+	if (this->shared->sim_data.philo_count % 2)
+		think_time += this->shared->sim_data.time_to_eat;
 	if (think_time > 0)
 	{
 		if (change_state(this, THINK) == DEATH_VAL)
@@ -109,17 +109,3 @@ void	*philosopher_routine(void *this_)
 	routine_loop(this);
 	return (free(this), NULL);
 }
-
-/*
-FLOW CHART:
-
-	loop:	(routine)
-		Get_forks				-> Dies
-		{ Queues for mutex, if both forks 0, put both to 1 else wait}
-		  \-> Eats				-> Dies
-		  	{ Has forks locked, wait time_to_eat, or dies}
-				\-> Sleeps		-> Dies
-				{ Has forks unlocked, wait time_to_sleep, or dies }
-					\-> Thinks
-					{ Think at least time_to_eat / 2 us}
-*/

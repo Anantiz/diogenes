@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 14:22:06 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:03:53 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	shall_take_forks(t_philo *this)
 {
-	if 	(this->shared->forks_state[this->number] == 0 && \
+	if (this->shared->forks_state[this->number] == 0 && \
 		this->shared->forks_state[(this->number + 1) % \
 		this->shared->sim_data.philo_count] == 0)
 	{

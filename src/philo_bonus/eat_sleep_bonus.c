@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:57:47 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:24:32 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	fork_unlocker(t_philo *this)
 {
 	if (!pthread_mutex_lock(this->shared->forks_lock))
 	{
-		this->shared->forks_count -= 2;
+		this->shared->forks_count += 2;
 		pthread_mutex_unlock(this->shared->forks_lock);
 		return (0);
 	}
@@ -29,10 +29,8 @@ int	fork_unlocker(t_philo *this)
 
 static int	shall_i_eat(t_philo *this)
 {
-	if (this)
-	{
+	if (this->shared->forks_count >= 2)
 		return (1);
-	}
 	return (0);
 }
 
@@ -45,17 +43,19 @@ int	get_forks(t_philo *this)
 			change_state(this, DIE);
 			return (DEATH_VAL);
 		}
+		if (pthread_mutex_lock(this->shared->forks_lock))
+		{
+			write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
+			return (-1);
+		}
 		if (shall_i_eat(this))
 		{
-			if (pthread_mutex_lock(this->shared->forks_lock))
-			{
-				write(2, MUTEX_LOCK_ERROR"04\n", MLE_LEN + 3);
-				return (-1);
-			}
-			this->shared->forks_count += 2;
+			this->shared->forks_count -= 2;
 			pthread_mutex_unlock(this->shared->forks_lock);
 			return (change_state(this, FORK));
 		}
+		else
+			pthread_mutex_unlock(this->shared->forks_lock);
 	}
 }
 

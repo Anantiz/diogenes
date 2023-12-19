@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:53:03 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:04:25 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ static void	routine_loop(t_philo *this)
 
 	while (this->meal_count < this->shared->sim_data.meal_max)
 	{
-		// printf("%d : Try lock\n", this->number + 1);
 		status = get_forks(this);
-		// printf("%d : locked status %d\n", this->number + 1, status);
 		if (!status)
 		{
 			if (eat_then_sleep(this))

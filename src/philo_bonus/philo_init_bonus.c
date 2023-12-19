@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:57:43 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:02:10 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,3 @@ int	spawn_philosophers(t_shared *shared)
 	pthread_mutex_unlock(shared->forks_lock);
 	return (0);
 }
-

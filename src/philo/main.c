@@ -6,13 +6,14 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 20:37:10 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:04:08 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	pre_init_data(t_shared *shared, pthread_mutex_t *print_lock, pthread_mutex_t *one_to_rule_them_all)
+static void	pre_init_data(t_shared *shared, pthread_mutex_t *print_lock,
+	pthread_mutex_t *one_to_rule_them_all)
 {
 	shared->death = 0;
 	shared->wait = 0;

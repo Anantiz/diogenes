@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 20:56:11 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 18:57:45 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:23:03 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static void	print_invalid_input(void)
 int	main(int argc, char **argv)
 {
 	pthread_mutex_t	print_lock;
-	pthread_mutex_t	forks_state_lock;
+	pthread_mutex_t	forks_lock;
 	t_shared		shared;
 	int				error;
 	int				i;
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
-	pre_init_data(&shared, &print_lock, &forks_state_lock);
+	pre_init_data(&shared, &print_lock, &forks_lock);
 	error = init_shared_resources(&shared, argc, argv);
 	if (error < 0)
 		return (1);
