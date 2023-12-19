@@ -6,19 +6,25 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 20:28:16 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:20:50 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/*
+Main loop:
+It will take forks, eat, release them, and repeat
+*/
 static void	routine_loop(t_philo *this)
 {
-	int			status;
+	int	status;
 
 	while (this->meal_count < this->shared->sim_data.meal_max)
 	{
+		// printf("%d : Try lock\n", this->number + 1);
 		status = get_forks(this);
+		// printf("%d : locked status %d\n", this->number + 1, status);
 		if (!status)
 		{
 			if (eat_then_sleep(this))
@@ -37,6 +43,7 @@ static void	routine_loop(t_philo *this)
 	return ;
 }
 
+// Mondaine Helper
 static void	wait_others(t_philo *this)
 {
 	int		wait;
@@ -54,6 +61,10 @@ static void	wait_others(t_philo *this)
 	}
 }
 
+/*
+Thread entry point
+	Waits for every thread to be spawned before executing routine
+*/
 void	*philosopher_routine(void *this_)
 {
 	t_philo	*this;
@@ -69,7 +80,7 @@ void	*philosopher_routine(void *this_)
 	{
 		if (this->shared->sim_data.philo_count % 2 == 1 && \
 			this->number + 1 == this->shared->sim_data.philo_count)
-			ft_usleep(this, this->shared->sim_data.time_to_eat - 1);
+			ft_usleep(this, this->shared->sim_data.time_to_eat + 1);
 		else
 			ft_usleep(this, (this->shared->sim_data.time_to_eat / 2));
 	}

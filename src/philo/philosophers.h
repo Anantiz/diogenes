@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 20:36:14 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 13:58:10 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int			spawn_philosophers(t_shared *shared);
 void		*philosopher_routine(void *this_);
 // Forks
 int			get_forks(t_philo *this);
-int			forks_lock(t_philo *this, int status);
-int			release_forks(t_philo *this);
+void		release_forks_state(t_philo *this);
+int			release_forks_mutex(t_philo *this);
 // States
 int			eat_then_sleep(t_philo *this);
 int			think(t_philo *this);

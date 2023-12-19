@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 20:04:15 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/19 13:44:43 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
 	{
-		a -= 2;
+		a -= 10;
 		if (a < 0)
 			return (0);
 		return (a);
 	}
-	b -= 2;
+	b -= 10;
 	if (b < 0)
 		return (0);
 	return (b);
