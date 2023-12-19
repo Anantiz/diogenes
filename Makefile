@@ -6,12 +6,12 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/18 20:24:46 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/19 18:58:12 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC:=gcc
-CFLAGS:= -Wall -Werror -Wextra -pthread #-g3 -fsanitize=thread
+CFLAGS:= -Wall -Werror -Wextra -pthread #-g3 -fsanitize=address
 RM:=rm -rf
 
 NAME:=philo
