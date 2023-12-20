@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 20:56:11 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 18:12:46 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 20:29:16 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 static void	pre_init_data(t_shared *shared)
 {
-	shared->death = 0;
+	sem_unlink(SEM_FORK);
+	sem_unlink(SEM_WAIT);
 	shared->wait = 0;
 	shared->pid_list = NULL;
-	shared->forks_count = sem_open(SEM_FORK, O_CREAT);
-	if (shared->forks_count == SEM_FAILED)
-	{
-		write(2, "Semaphore error, abort\n", 23);
-		exit(-1);
-	}
 }
 
 static void	print_invalid_input(void)
@@ -37,6 +32,7 @@ static void	print_invalid_input(void)
 		"Any invalid arguments will be assumed to be 0\n", 292);
 }
 
+// Handles End Of Process
 static void	handles_eop(t_shared *shared)
 {
 	int		i;
@@ -44,10 +40,16 @@ static void	handles_eop(t_shared *shared)
 	pid_t	dead_pid;
 
 	dead_pid = waitpid(-1, &status, 0);
+	if (dead_pid == -1)
+	{
+		printf("AAAAA WAIT PID DIDN'T WORK FIRE EVERYWHERE !!\n"
+		"\tstatus: %d\terrno: %d\n", status, errno);
+		return ;
+	}
 	i = 0;
 	while (i < shared->sim_data.philo_count)
 	{
-		if (kill(shared->pid_list[i], SIGKILL))
+		if (dead_pid != shared->pid_list[i] && kill(shared->pid_list[i], SIGKILL))
 		{
 			write(2, "Some weird error occured so i died, sry\n", 40);
 			return ;
@@ -60,7 +62,6 @@ int	main(int argc, char **argv)
 {
 	t_shared	shared;
 	int			status;
-	int			i;
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
@@ -70,8 +71,19 @@ int	main(int argc, char **argv)
 		return (1);
 	else if (status)
 		return (clean_shared(&shared), 0);
-	if (spawn_philosophers(&shared))
+	if (spawn_philosophers(&shared) == SUB_PROCESS_SUCCES)
 		return (clean_shared(&shared), 0);
+	if (spawn_philosophers(&shared) == -SUB_PROCESS_SUCCES)
+	{
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+		return (clean_shared(&shared), 0);
+	}
 	handles_eop(&shared);
 	return (clean_shared(&shared), 0);
 }

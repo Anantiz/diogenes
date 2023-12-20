@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 18:13:51 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 21:37:11 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ static int	think(t_philo *this)
 		think_time += this->shared->sim_data.time_to_eat;
 	if (think_time > 0)
 	{
-		if (change_state(this, THINK) == DEATH_VAL)
-			return (1);
+		change_state(this, THINK);
 		if (ft_usleep(this, think_time) == DEATH_VAL)
 			return (1);
 	}
+	if (did_i_starve(this))
+		change_state(this, DIE);
 	return (0);
 }
 
@@ -39,14 +40,13 @@ static void	routine_loop(t_philo *this)
 		status = get_forks(this);
 		if (!status)
 		{
+			if (did_i_starve(this))
+				change_state(this, DIE);
 			if (eat_then_sleep(this) == DEATH_VAL)
 				break ;
 		}
 		else if (status == DEATH_VAL)
-		{
 			change_state(this, DIE);
-			break ;
-		}
 		else
 			break ;
 		if (think(this))
@@ -55,24 +55,20 @@ static void	routine_loop(t_philo *this)
 	return ;
 }
 
-// static void	wait_family(t_philo *this)
-// {
-// 	int		wait;
+static void	wait_others(void)
+{
+	sem_t	*my_sem_wait;
 
-// 	wait = 1;
-// 	while (wait)
-// 	{
-// 		pthread_mutex_lock(this->shared->forks_lock);
-// 		if (this->shared->wait == 0)
-// 		{
-// 			pthread_mutex_unlock(this->shared->forks_lock);
-// 			return ;
-// 		}
-// 		pthread_mutex_unlock(this->shared->forks_lock);
-// 	}
-// }
+	my_sem_wait = SEM_FAILED;
+	while (my_sem_wait == SEM_FAILED)
+	{
+		my_sem_wait = sem_open(SEM_WAIT, 0);
+	}
+	sem_wait(my_sem_wait);
+	sem_close(my_sem_wait);
+}
 
-static int	synchronize_family(t_philo *this)
+static int	synchronize_table(t_philo *this)
 {
 	this->last_meal = get_time();
 	if ((this->number + 1) % 2 == 0)
@@ -98,16 +94,19 @@ int	philosopher_routine(void *this_)
 {
 	t_philo	*this;
 
-	this->shared->sim_data.start_time = get_time();
 	this = this_;
-	// wait_family(this);
-	this->forks_count = sem_open(SEM_FORK, O_)
+	wait_others();
+	this->shared->sim_data.start_time = get_time();
 	if (this->shared->sim_data.meal_max == 0)
 		return (free(this), 0);
 	if (this->shared->sim_data.philo_count == 1)
-		return (do_one_philo(this), free(this), 0);
-	if (synchronize_family(this))
-		return (1);
+		do_one_philo(this);
+	this->forks_count = sem_open(SEM_FORK, 0);
+	if (this->forks_count == 0)
+		return (free(this), -1);
+	if (synchronize_table(this))
+		return (free(this), -SUB_PROCESS_SUCCES);
 	routine_loop(this);
-	return (free(this), 0);
+	free(this);
+	exit(SUB_PROCESS_SUCCES);
 }

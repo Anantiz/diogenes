@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 17:57:46 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 20:05:45 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,25 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 /* Parses console arguments and init shared resources */
 int	init_shared_resources(t_shared *shared, int argc, char **argv)
 {
+	init_simu_data(&shared->sim_data, argc, argv);
 	shared->pid_list = ft_calloc(shared->sim_data.philo_count, \
 		sizeof(pthread_t *));
 	if (!shared->pid_list)
 		return (-1);
+	shared->forks_count = sem_open(SEM_FORK, O_CREAT, 0644, \
+		shared->sim_data.philo_count);
+	if (!shared->forks_count)
+	{
+		write(2, "Semaphore error, abort\n", 23);
+		return (-1);
+	}
 	return (0);
 }
 
 void	clean_shared(t_shared *shared)
 {
-	int	i;
-
 	free(shared->pid_list);
 	sem_close(shared->forks_count);
+	sem_unlink(SEM_FORK);
+	sem_unlink(SEM_WAIT);
 }

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 18:13:18 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 20:32:29 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,50 +14,35 @@
 
 int	fork_unlocker(t_philo *this)
 {
-	/*
-	sem_post()
-	*/
+	sem_post(this->forks_count);
+	return (sem_post(this->forks_count));
 }
 
 int	get_forks(t_philo *this)
 {
-	while (1)
+	if (did_i_starve(this))
+		change_state(this, DIE);
+	if (!sem_wait(this->forks_count))
 	{
-		if (did_i_starve(this))
-		{
-			change_state(this, DIE);
-			return (DEATH_VAL);
-		}
-		if (shall_i_eat(this))
-		{
-			this->shared->forks_count -= 2;
-			return (change_state(this, FORK));
-		}
+		change_state(this, FORK);
+		if (!sem_wait(this->forks_count))
+			return (change_state(this, FORK), 0);
 	}
+	return (-1);
 }
 
 int	eat_then_sleep(t_philo *this)
 {
-	if (change_state(this, EAT))
-	{
-		fork_unlocker(this);
-		return (-1);
-	}
+	change_state(this, EAT);
 	this->last_meal = get_time();
 	this->meal_count++;
-	if (ft_usleep(this, this->shared->sim_data.time_to_eat) == DEATH_VAL)
-	{
-		fork_unlocker(this);
-		return (DEATH_VAL);
-	}
+	ft_usleep(this, this->shared->sim_data.time_to_eat);
 	if (fork_unlocker(this))
 		return (-1);
 	if (this->shared->sim_data.time_to_sleep > 0)
 	{
-		if (change_state(this, SLEEP) == DEATH_VAL)
-			return (DEATH_VAL);
-		if (ft_usleep(this, this->shared->sim_data.time_to_sleep) == DEATH_VAL)
-			return (DEATH_VAL);
+		change_state(this, SLEEP);
+		ft_usleep(this, this->shared->sim_data.time_to_sleep);
 	}
 	return (0);
 }

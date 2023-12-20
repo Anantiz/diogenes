@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 18:08:28 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 20:24:15 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <semaphore.h>
 # include <pthread.h>
 # include <signal.h>
+# include <errno.h>
 
 # include <sys/time.h>
 # include <sys/types.h>
@@ -30,7 +31,9 @@
 
 # define STARVED -8798
 # define DEATH_VAL 666
+# define SUB_PROCESS_SUCCES 420
 # define SEM_FORK "sem_fork"
+# define SEM_WAIT "sem_wait"
 
 /* Read-only once initialized */
 typedef struct s_sim_data
@@ -51,8 +54,7 @@ Forks are a mutex array:
 typedef struct s_shared
 {
 	//Don't forget to change makefile because of idiots
-	int			death;
-	int			wait;
+	pid_t		*wait;
 	sem_t		*forks_count;
 	pid_t		*pid_list;
 	t_sim_data	sim_data;
@@ -87,7 +89,7 @@ int			get_forks(t_philo *this);
 
 /* Philo Utils */
 
-int			change_state(t_philo *this, t_philo_state state);
+void		change_state(t_philo *this, t_philo_state state);
 int			did_i_starve(t_philo *this);
 int			fork_unlocker(t_philo *this);
 void		do_one_philo(t_philo *this);
