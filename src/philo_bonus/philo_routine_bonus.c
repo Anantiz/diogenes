@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 19:30:43 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 18:13:51 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,22 @@ static void	routine_loop(t_philo *this)
 	return ;
 }
 
-static void	wait_family(t_philo *this)
-{
-	int		wait;
+// static void	wait_family(t_philo *this)
+// {
+// 	int		wait;
 
-	wait = 1;
-	while (wait)
-	{
-		pthread_mutex_lock(this->shared->forks_lock);
-		if (this->shared->wait == 0)
-		{
-			pthread_mutex_unlock(this->shared->forks_lock);
-			return ;
-		}
-		pthread_mutex_unlock(this->shared->forks_lock);
-	}
-}
+// 	wait = 1;
+// 	while (wait)
+// 	{
+// 		pthread_mutex_lock(this->shared->forks_lock);
+// 		if (this->shared->wait == 0)
+// 		{
+// 			pthread_mutex_unlock(this->shared->forks_lock);
+// 			return ;
+// 		}
+// 		pthread_mutex_unlock(this->shared->forks_lock);
+// 	}
+// }
 
 static int	synchronize_family(t_philo *this)
 {
@@ -94,18 +94,20 @@ static int	synchronize_family(t_philo *this)
 	return (0);
 }
 
-void	*philosopher_routine(void *this_)
+int	philosopher_routine(void *this_)
 {
 	t_philo	*this;
 
+	this->shared->sim_data.start_time = get_time();
 	this = this_;
-	wait_family(this);
+	// wait_family(this);
+	this->forks_count = sem_open(SEM_FORK, O_)
 	if (this->shared->sim_data.meal_max == 0)
-		return (free(this), NULL);
+		return (free(this), 0);
 	if (this->shared->sim_data.philo_count == 1)
-		return (do_one_philo(this), free(this), NULL);
+		return (do_one_philo(this), free(this), 0);
 	if (synchronize_family(this))
-		return (NULL);
+		return (1);
 	routine_loop(this);
-	return (free(this), NULL);
+	return (free(this), 0);
 }

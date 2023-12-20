@@ -6,24 +6,31 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 19:08:04 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/20 18:08:28 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_BONUS_H
 # define PHILOSOPHERS_BONUS_H
 
+# include <stdio.h>
 # include <unistd.h>
-# include <pthread.h>
+# include <fcntl.h>
+
 # include <string.h>
 # include <stdlib.h>
+# include <semaphore.h>
+# include <pthread.h>
+# include <signal.h>
+
 # include <sys/time.h>
-# include <stdio.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
 
 # define STARVED -8798
-# define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex\n"
-# define MLE_LEN 49
 # define DEATH_VAL 666
+# define SEM_FORK "sem_fork"
 
 /* Read-only once initialized */
 typedef struct s_sim_data
@@ -44,27 +51,19 @@ Forks are a mutex array:
 typedef struct s_shared
 {
 	//Don't forget to change makefile because of idiots
-	int				death;
-	int				wait;
-	volatile int	forks_count;
-	t_sim_data		sim_data;
-	pthread_mutex_t	*forks_lock;
-	pthread_mutex_t	*print_lock;
-	pthread_t		*philosophers_id;
+	int			death;
+	int			wait;
+	sem_t		*forks_count;
+	pid_t		*pid_list;
+	t_sim_data	sim_data;
 }t_shared;
 
-/*
-N + 1 = (N + 1) % philo_count
-
-As an internal standard:
-	left-fork = this.forks[this.number]
-	right-fork = this.forks[(this.number + 1) % this.number]
-*/
 typedef struct s_philosophers
 {
 	int				number;
 	unsigned int	meal_count;
 	suseconds_t		last_meal;
+	sem_t			*forks_count;
 	t_shared		*shared;
 }t_philo;
 
@@ -82,7 +81,7 @@ int			init_shared_resources(t_shared *shared, int argc, char **argv);
 void		clean_shared(t_shared *shared);
 int			spawn_philosophers(t_shared *shared);
 // Routine
-void		*philosopher_routine(void *this_);
+int			philosopher_routine(void *this_);
 int			eat_then_sleep(t_philo *this);
 int			get_forks(t_philo *this);
 
