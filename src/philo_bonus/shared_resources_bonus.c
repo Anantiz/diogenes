@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 20:05:45 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:33:55 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	init_shared_resources(t_shared *shared, int argc, char **argv)
 		write(2, "Semaphore error, abort\n", 23);
 		return (-1);
 	}
+	sem_open(SEM_PRINT, O_CREAT, 0644, 1);
 	return (0);
 }
 
@@ -53,4 +54,5 @@ void	clean_shared(t_shared *shared)
 	sem_close(shared->forks_count);
 	sem_unlink(SEM_FORK);
 	sem_unlink(SEM_WAIT);
+	sem_unlink(SEM_PRINT);
 }

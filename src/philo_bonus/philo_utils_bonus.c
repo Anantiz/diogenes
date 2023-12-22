@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 20:31:50 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:13:21 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	did_i_starve(t_philo *this)
 {
-	if (get_time() - this->last_meal > this->shared->sim_data.time_to_die)
+	if (get_time() - this->last_meal > this->shared.sim_data.time_to_die)
 		return (1);
 	return (0);
 }
@@ -23,10 +23,10 @@ int	did_i_starve(t_philo *this)
 void	do_one_philo(t_philo *this)
 {
 	change_state(this, FORK);
-	usleep(this->shared->sim_data.time_to_die);
+	usleep(this->shared.sim_data.time_to_die);
 	change_state(this, DIE);
 	free(this);
-	exit(SUB_PROCESS_SUCCES);
+	exit(SUB_PROCESS_SUCCESS);
 }
 
 static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
@@ -52,8 +52,8 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 	suseconds_t		time_die;
 
 	wait_target = get_time() + t;
-	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die));
-	time_die = this->shared->sim_data.time_to_die + this->last_meal;
+	usleep((int)get_sleep_time(t, this->shared.sim_data.time_to_die));
+	time_die = this->shared.sim_data.time_to_die + this->last_meal;
 	while (1)
 	{
 		gettimeofday(&var, NULL);

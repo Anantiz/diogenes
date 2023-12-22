@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 20:24:15 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:27:34 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@
 
 # define STARVED -8798
 # define DEATH_VAL 666
-# define SUB_PROCESS_SUCCES 420
+# define SUB_PROCESS_SUCCESS 0
+# define SUB_PROCESS_FAILURE -1
 # define SEM_FORK "sem_fork"
 # define SEM_WAIT "sem_wait"
+# define SEM_PRINT "sem_print"
 
 /* Read-only once initialized */
 typedef struct s_sim_data
@@ -66,7 +68,8 @@ typedef struct s_philosophers
 	unsigned int	meal_count;
 	suseconds_t		last_meal;
 	sem_t			*forks_count;
-	t_shared		*shared;
+	sem_t			*print_lock;
+	t_shared		shared;
 }t_philo;
 
 typedef enum e_philo_state
@@ -83,7 +86,8 @@ int			init_shared_resources(t_shared *shared, int argc, char **argv);
 void		clean_shared(t_shared *shared);
 int			spawn_philosophers(t_shared *shared);
 // Routine
-int			philosopher_routine(void *this_);
+void		philosopher_routine(void *this_);
+void		think(t_philo *this);
 int			eat_then_sleep(t_philo *this);
 int			get_forks(t_philo *this);
 

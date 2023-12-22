@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/20 10:40:33 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/22 17:32:57 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ bonus: $(BNS_OBJECTS)
 	@$(CC) $^ $(CFLAGS) -o $(BNS_NAME)
 
 clean:
-	@$(RM) $(SRC_OBJECTS) $(BONUS_OBJ)
+	@$(RM) $(SRC_OBJECTS) $(BNS_OBJECTS)
 
 fclean: clean
 	@$(RM) $(NAME) $(BNS_NAME)

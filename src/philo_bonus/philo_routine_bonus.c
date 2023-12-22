@@ -6,36 +6,17 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 21:37:11 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:37:00 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-static int	think(t_philo *this)
-{
-	long	think_time;
-
-		think_time = this->shared->sim_data.time_to_eat - \
-			this->shared->sim_data.time_to_sleep - 5;
-	if (this->shared->sim_data.philo_count % 2)
-		think_time += this->shared->sim_data.time_to_eat;
-	if (think_time > 0)
-	{
-		change_state(this, THINK);
-		if (ft_usleep(this, think_time) == DEATH_VAL)
-			return (1);
-	}
-	if (did_i_starve(this))
-		change_state(this, DIE);
-	return (0);
-}
-
 static void	routine_loop(t_philo *this)
 {
 	int			status;
 
-	while (this->meal_count < this->shared->sim_data.meal_max)
+	while (this->meal_count < this->shared.sim_data.meal_max)
 	{
 		status = get_forks(this);
 		if (!status)
@@ -49,8 +30,7 @@ static void	routine_loop(t_philo *this)
 			change_state(this, DIE);
 		else
 			break ;
-		if (think(this))
-			break ;
+		think(this);
 	}
 	return ;
 }
@@ -68,45 +48,46 @@ static void	wait_others(void)
 	sem_close(my_sem_wait);
 }
 
-static int	synchronize_table(t_philo *this)
+static void	synchronize_processes(t_philo *this)
 {
 	this->last_meal = get_time();
 	if ((this->number + 1) % 2 == 0)
 	{
-		if (this->shared->sim_data.philo_count % 2 == 1 && \
-			this->number + 1 == this->shared->sim_data.philo_count)
+		if (this->shared.sim_data.philo_count % 2 == 1 && \
+			this->number + 1 == this->shared.sim_data.philo_count)
 		{
-			if (ft_usleep(this, this->shared->sim_data.time_to_eat + 1) \
-				== DEATH_VAL)
-				return (free(this), 1);
+			ft_usleep(this, this->shared.sim_data.time_to_eat + 1);
 		}
 		else
-		{
-			if (ft_usleep(this, (this->shared->sim_data.time_to_eat / 2)) \
-				== DEATH_VAL)
-				return (free(this), 1);
-		}
+			ft_usleep(this, (this->shared.sim_data.time_to_eat / 2));
 	}
-	return (0);
+	return ;
 }
 
-int	philosopher_routine(void *this_)
+static void	exit_clean(t_philo *this, int stauts)
+{
+	free(this);
+	exit(stauts);
+}
+
+void	philosopher_routine(void *this_)
 {
 	t_philo	*this;
 
 	this = this_;
 	wait_others();
-	this->shared->sim_data.start_time = get_time();
-	if (this->shared->sim_data.meal_max == 0)
-		return (free(this), 0);
-	if (this->shared->sim_data.philo_count == 1)
+	this->shared.sim_data.start_time = get_time();
+	if (this->shared.sim_data.meal_max == 0)
+		exit_clean(this, SUB_PROCESS_SUCCESS);
+	if (this->shared.sim_data.philo_count == 1)
 		do_one_philo(this);
 	this->forks_count = sem_open(SEM_FORK, 0);
-	if (this->forks_count == 0)
-		return (free(this), -1);
-	if (synchronize_table(this))
-		return (free(this), -SUB_PROCESS_SUCCES);
+	if (this->forks_count == NULL)
+		exit_clean(this, SUB_PROCESS_FAILURE);
+	this->print_lock = sem_open(SEM_PRINT, 0);
+	if (this->print_lock == NULL)
+		exit_clean(this, SUB_PROCESS_SUCCESS);
+	synchronize_processes(this);
 	routine_loop(this);
-	free(this);
-	exit(SUB_PROCESS_SUCCES);
+	exit_clean(this, SUB_PROCESS_SUCCESS);
 }

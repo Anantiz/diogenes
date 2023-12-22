@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 20:20:39 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:34:33 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_philo	*init_philosopher(t_shared *shared, int i)
 		return (NULL);
 	philo->number = i;
 	philo->meal_count = 0;
-	philo->shared = shared;
+	philo->shared = *shared;
 	return (philo);
 }
 
@@ -44,7 +44,7 @@ int	spawn_philosophers(t_shared *shared)
 		if (pid == -1)
 			return (-1);
 		if (pid == 0)
-			return (philosopher_routine(philo));
+			philosopher_routine(philo);
 		else
 		{
 			free(philo);
@@ -56,11 +56,8 @@ int	spawn_philosophers(t_shared *shared)
 	if (sem)
 		sem_close(sem);
 	else
-	{
-		printf("INIT ERROR AAAAA FIRE !!!!\n");
 		return (-1);
-	}
-	return (0);
+	return (420);
 }
 
 /*

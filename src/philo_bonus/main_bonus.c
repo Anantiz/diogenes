@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 20:56:11 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/20 20:29:16 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:31:34 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	pre_init_data(t_shared *shared)
 {
 	sem_unlink(SEM_FORK);
 	sem_unlink(SEM_WAIT);
+	sem_unlink(SEM_PRINT);
 	shared->wait = 0;
 	shared->pid_list = NULL;
 }
@@ -42,7 +43,7 @@ static void	handles_eop(t_shared *shared)
 	dead_pid = waitpid(-1, &status, 0);
 	if (dead_pid == -1)
 	{
-		printf("AAAAA WAIT PID DIDN'T WORK FIRE EVERYWHERE !!\n"
+		printf("AAAAA FIRE EVERYWHERE !!\n"
 		"\tstatus: %d\terrno: %d\n", status, errno);
 		return ;
 	}
@@ -71,19 +72,7 @@ int	main(int argc, char **argv)
 		return (1);
 	else if (status)
 		return (clean_shared(&shared), 0);
-	if (spawn_philosophers(&shared) == SUB_PROCESS_SUCCES)
-		return (clean_shared(&shared), 0);
-	if (spawn_philosophers(&shared) == -SUB_PROCESS_SUCCES)
-	{
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-		return (clean_shared(&shared), 0);
-	}
+	status = spawn_philosophers(&shared);
 	handles_eop(&shared);
 	return (clean_shared(&shared), 0);
 }
