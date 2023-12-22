@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 13:44:43 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:59:25 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
 	{
-		a -= 10;
+		a -= 512;
 		if (a < 0)
 			return (0);
 		return (a);
 	}
-	b -= 10;
+	b -= 512;
 	if (b < 0)
 		return (0);
 	return (b);
@@ -51,7 +51,8 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 	struct timeval	var;
 
 	wait_target = get_time() + t;
-	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die));
+	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die - \
+		this->last_meal));
 	while (1)
 	{
 		gettimeofday(&var, NULL);
