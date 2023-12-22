@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:27:34 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:12:32 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,8 @@ typedef struct s_sim_data
 	suseconds_t		time_to_sleep;
 }t_sim_data;
 
-/*
-Forks are a mutex array:
-	A locked mutex means a used fork
-	An available mutex means an available fork
-*/
 typedef struct s_shared
 {
-	//Don't forget to change makefile because of idiots
 	pid_t		*wait;
 	sem_t		*forks_count;
 	pid_t		*pid_list;

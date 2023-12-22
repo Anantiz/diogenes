@@ -13,7 +13,7 @@ SRC_FILES:= main.c  philo_init.c  philo_routine.c\
 SRC_FILES:= $(addprefix $(SRC_PATH)/,$(SRC_FILES))
 SRC_OBJECTS:= $(patsubst %.c,%.o,$(SRC_FILES))
 
-all: $(NAME) bonus
+all: $(NAME)
 
 $(NAME): $(SRC_OBJECTS)
 	@echo Compiling main bin

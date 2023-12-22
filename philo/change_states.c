@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:51:58 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 16:59:32 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:06:13 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	change_state(t_philo *this, t_philo_state state)
 			pthread_mutex_unlock(this->shared->print_lock);
 			return (DEATH_VAL);
 		}
-		printf("%ld %d %s\n", time_stamp, \
+		printf("%-12ld %-3d\t%s\n", time_stamp, \
 			this->number + 1, state_str[state]);
 		if (state == DIE)
 			this->shared->death = 1;

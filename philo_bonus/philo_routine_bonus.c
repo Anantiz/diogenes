@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:37:00 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:03:37 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ void	philosopher_routine(void *this_)
 
 	this = this_;
 	wait_others();
-	this->shared.sim_data.start_time = get_time();
-	if (this->shared.sim_data.meal_max == 0)
-		exit_clean(this, SUB_PROCESS_SUCCESS);
-	if (this->shared.sim_data.philo_count == 1)
-		do_one_philo(this);
 	this->forks_count = sem_open(SEM_FORK, 0);
 	if (this->forks_count == NULL)
 		exit_clean(this, SUB_PROCESS_FAILURE);
 	this->print_lock = sem_open(SEM_PRINT, 0);
 	if (this->print_lock == NULL)
 		exit_clean(this, SUB_PROCESS_SUCCESS);
+	this->shared.sim_data.start_time = get_time();
+	if (this->shared.sim_data.meal_max == 0)
+		exit_clean(this, SUB_PROCESS_SUCCESS);
+	if (this->shared.sim_data.philo_count == 1)
+		do_one_philo(this);
 	synchronize_processes(this);
 	routine_loop(this);
 	exit_clean(this, SUB_PROCESS_SUCCESS);

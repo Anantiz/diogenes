@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:51:58 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:16:15 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:06:33 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	change_state(t_philo *this, t_philo_state state)
 	init_states_cuz_shitty_norm(state_str);
 	time_stamp = (get_time() - this->shared.sim_data.start_time) / 1000;
 	sem_wait(this->print_lock);
-	printf("%ld %d %s\n", time_stamp, \
+	printf("%-12ld %-3d\t%s\n", time_stamp, \
 		this->number + 1, state_str[state]);
 	if (state == DIE)
 	{

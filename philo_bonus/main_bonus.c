@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 20:56:11 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:31:34 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:08:24 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,14 @@ static void	handles_eop(t_shared *shared)
 	if (dead_pid == -1)
 	{
 		printf("AAAAA FIRE EVERYWHERE !!\n"
-		"\tstatus: %d\terrno: %d\n", status, errno);
+			"\tstatus: %d\terrno: %d\n", status, errno);
 		return ;
 	}
 	i = 0;
 	while (i < shared->sim_data.philo_count)
 	{
-		if (dead_pid != shared->pid_list[i] && kill(shared->pid_list[i], SIGKILL))
+		if (dead_pid != shared->pid_list[i] && kill(shared->pid_list[i], \
+			SIGKILL))
 		{
 			write(2, "Some weird error occured so i died, sry\n", 40);
 			return ;

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:15:17 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:33:55 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:12:45 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 {
 	sim_data->philo_count = ft_atoi(argv[1]);
 	if (sim_data->philo_count <= 0)
-		return (printf("number_of_philosophers must be a positive non-zero "
-				"integer\n"));
+	{
+		printf("number_of_philosophers must be a positive non-zero "
+			"integer\n");
+		return (1);
+	}
 	sim_data->time_to_die = ft_abs(ft_atoi(argv[2])) * 1000;
 	sim_data->time_to_eat = ft_abs(ft_atoi(argv[3])) * 1000;
 	sim_data->time_to_sleep = ft_abs(ft_atoi(argv[4])) * 1000;
@@ -32,7 +35,8 @@ static int	init_simu_data(t_sim_data *sim_data, int argc, char **argv)
 /* Parses console arguments and init shared resources */
 int	init_shared_resources(t_shared *shared, int argc, char **argv)
 {
-	init_simu_data(&shared->sim_data, argc, argv);
+	if (init_simu_data(&shared->sim_data, argc, argv))
+		return (1);
 	shared->pid_list = ft_calloc(shared->sim_data.philo_count, \
 		sizeof(pthread_t *));
 	if (!shared->pid_list)

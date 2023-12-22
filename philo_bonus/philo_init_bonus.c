@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 17:34:33 by aurban           ###   ########.fr       */
+/*   Updated: 2023/12/22 18:12:07 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,24 @@ static t_philo	*init_philosopher(t_shared *shared, int i)
 	return (philo);
 }
 
+static int	philo_do_thing(t_shared *shared)
+{
+	sem_t	*sem;
+
+	sem = sem_open(SEM_WAIT, O_CREAT, 0644, shared->sim_data.philo_count);
+	if (sem)
+	{
+		sem_close(sem);
+		return (420);
+	}
+	else
+		return (-1);
+}
+
 // Spawns philo_count processes
 int	spawn_philosophers(t_shared *shared)
 {
 	t_philo	*philo;
-	sem_t	*sem;
 	int		pid;
 	int		i;
 
@@ -52,48 +65,5 @@ int	spawn_philosophers(t_shared *shared)
 			i++;
 		}
 	}
-	sem = sem_open(SEM_WAIT, O_CREAT, 0644, shared->sim_data.philo_count);
-	if (sem)
-		sem_close(sem);
-	else
-		return (-1);
-	return (420);
+	return (philo_do_thing(shared));
 }
-
-/*
-sem_open
-sem_close
-sem_post
-sem_wait
-sem_unlink
-*/
-
-
-/*
-routine()
-{
-	loop:
-		if (some_condition)
-			break ;
-	return (1)
-}
-
-foo2()
-{
-	// Creates multiple porcess
-	loop:
-		pid = fork()
-		if (pid == 0)
-			return (routine())
-
-	return (0)
-}
-
-foo1()
-{
-	// Exit the program once a process returns
-	if (foo2())
-		printf("A")
-		exit()
-}
-*/

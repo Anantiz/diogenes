@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/22 17:53:26 by aurban           ###   ########.fr        #
+#    Updated: 2023/12/22 17:55:50 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ BNS_FILES:= main_bonus.c change_states_bonus.c eat_sleep_bonus.c\
 BNS_FILES:= $(addprefix $(BNS_PATH)/,$(BNS_FILES))
 BNS_OBJECTS:= $(patsubst %.c,%.o,$(BNS_FILES))
 
-all: $(NAME) bonus
+all: $(NAME)
 
 $(NAME): $(BNS_OBJECTS)
 	@echo Compiling main bin
