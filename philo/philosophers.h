@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/19 13:58:10 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:50:05 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # include <stdio.h>
 
 # define STARVED -8798
+# define MUTEX_FAILURE -8799
 # define MUTEX_LOCK_ERROR "Critical error while attempting to lock a mutex\n"
-# define MLE_LEN 49
+# define MLE_LEN 48
 # define DEATH_VAL 666
 
 /* Read-only after initialization */
@@ -44,7 +45,6 @@ Forks are a mutex array:
 typedef struct s_shared
 {
 	int				death;
-	int				wait;
 	t_sim_data		sim_data;
 	int				*forks_state;
 	pthread_mutex_t	*forks_lock;
@@ -63,8 +63,9 @@ As an internal standard:
 typedef struct s_philosophers
 {
 	int				number;
+	int				next_fork;
 	unsigned int	meal_count;
-	suseconds_t		last_meal;
+	suseconds_t		starvation_time;
 	t_shared		*shared;
 }t_philo;
 
@@ -86,10 +87,10 @@ void		*philosopher_routine(void *this_);
 // Forks
 int			get_forks(t_philo *this);
 void		release_forks_state(t_philo *this);
-int			release_forks_mutex(t_philo *this);
+void		release_forks_mutex(t_philo *this);
 // States
 int			eat_then_sleep(t_philo *this);
-int			think(t_philo *this);
+void		think(t_philo *this);
 
 /* Philo Utils ----------------------------------*/
 

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/18 17:23:26 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:32:29 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static t_philo	*init_philosopher(t_shared *shared, int i)
 	philo->number = i;
 	philo->meal_count = 0;
 	philo->shared = shared;
+	philo->next_fork = (i + 1) % shared->sim_data.philo_count;
 	return (philo);
 }
 
@@ -34,8 +35,6 @@ int	spawn_philosophers(t_shared *shared)
 
 	i = 0;
 	pthread_mutex_lock(shared->print_lock);
-	shared->wait = 1;
-	pthread_mutex_unlock(shared->print_lock);
 	while (i < shared->sim_data.philo_count)
 	{
 		philo = init_philosopher(shared, i);
@@ -47,8 +46,6 @@ int	spawn_philosophers(t_shared *shared)
 		i++;
 	}
 	shared->sim_data.start_time = get_time();
-	pthread_mutex_lock(shared->print_lock);
-	shared->wait = 0;
 	pthread_mutex_unlock(shared->print_lock);
 	return (0);
 }

@@ -6,62 +6,39 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 13:39:20 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:54:31 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 18:20:31 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static int	release_forks_all(t_philo *this)
+static void	release_forks_all(t_philo *this)
 {
-	int	status;
-
-	status = 0;
-	if (!pthread_mutex_lock(this->shared->one_to_rule_them_all))
-	{
-		release_forks_state(this);
-		if (release_forks_mutex(this))
-			status = -1;
-	}
-	else
-		return (-1);
-	pthread_mutex_unlock(this->shared->one_to_rule_them_all);
-	return (status);
+	release_forks_state(this);
+	release_forks_mutex(this);
 }
 
 int	eat_then_sleep(t_philo *this)
 {
 	if (change_state(this, EAT))
-	{
-		release_forks_all(this);
-		return (-1);
-	}
+		return (release_forks_all(this), STARVED);
 	if (ft_usleep(this, this->shared->sim_data.time_to_eat))
-		return (-1);
-	this->last_meal = get_time();
+		return (STARVED);
+	this->starvation_time = get_time() + this->shared->sim_data.time_to_die;
 	this->meal_count++;
-	if (release_forks_all(this))
-		return (-1);
+	release_forks_all(this);
 	if (change_state(this, SLEEP))
-		return (-1);
+		return (STARVED);
 	if (ft_usleep(this, this->shared->sim_data.time_to_sleep))
-		return (-1);
+		return (STARVED);
 	return (0);
 }
 
-int	think(t_philo *this)
+void	think(t_philo *this)
 {
-	suseconds_t	think_time;
+	suseconds_t	forced_think_duration;
 
-	if (change_state(this, THINK))
-		return (-1);
-	think_time = this->shared->sim_data.time_to_die - \
-		(this->shared->sim_data.time_to_eat * 2) - \
-		this->shared->sim_data.time_to_sleep;
-	if (think_time > 0)
-	{
-		if (ft_usleep(this, think_time))
-			return (-1);
-	}
-	return (0);
+	forced_think_duration = this->starvation_time - this->shared->sim_data.time_to_eat - 128;
+	if (forced_think_duration > 0)
+		ft_usleep(this, forced_think_duration);
 }

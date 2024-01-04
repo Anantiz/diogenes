@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:59:34 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	did_i_starve(t_philo *this)
 {
-	if (get_time() - this->last_meal > this->shared.sim_data.time_to_die)
+	if (get_time() - this->starvation_time > this->shared.sim_data.time_to_die)
 		return (1);
 	return (0);
 }
@@ -53,8 +53,8 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 
 	wait_target = get_time() + t;
 	usleep((int)get_sleep_time(t, this->shared.sim_data.time_to_die - \
-		this->last_meal));
-	time_die = this->shared.sim_data.time_to_die + this->last_meal;
+		this->starvation_time));
+	time_die = this->shared.sim_data.time_to_die + this->starvation_time;
 	while (1)
 	{
 		gettimeofday(&var, NULL);

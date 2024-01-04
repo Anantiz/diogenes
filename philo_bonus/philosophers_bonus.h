@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:12:32 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_philosophers
 {
 	int				number;
 	unsigned int	meal_count;
-	suseconds_t		last_meal;
+	suseconds_t		starvation_time;
 	sem_t			*forks_count;
 	sem_t			*print_lock;
 	t_shared		shared;

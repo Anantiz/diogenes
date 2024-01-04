@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:03:37 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	wait_others(void)
 
 static void	synchronize_processes(t_philo *this)
 {
-	this->last_meal = get_time();
+	this->starvation_time = get_time();
 	if ((this->number + 1) % 2 == 0)
 	{
 		if (this->shared.sim_data.philo_count % 2 == 1 && \

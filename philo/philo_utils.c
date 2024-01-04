@@ -6,18 +6,11 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:59:25 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 18:23:42 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-int	did_i_starve(t_philo *this)
-{
-	if (get_time() - this->last_meal > this->shared->sim_data.time_to_die)
-		return (1);
-	return (0);
-}
 
 // Handles the special case where there is only one philosopher
 void	do_one_philo(t_philo *this)
@@ -32,16 +25,8 @@ void	do_one_philo(t_philo *this)
 static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
-	{
-		a -= 512;
-		if (a < 0)
-			return (0);
-		return (a);
-	}
-	b -= 512;
-	if (b < 0)
-		return (0);
-	return (b);
+		return (a - 512);
+	return (b - 512);
 }
 
 int	ft_usleep(t_philo *this, suseconds_t t)
@@ -50,17 +35,17 @@ int	ft_usleep(t_philo *this, suseconds_t t)
 	suseconds_t		time_now;
 	struct timeval	var;
 
-	wait_target = get_time() + t;
-	usleep((int)get_sleep_time(t, this->shared->sim_data.time_to_die - \
-		this->last_meal));
+	time_now = get_time();
+	wait_target = time_now + t;
+	usleep((int)get_sleep_time(t, this->starvation_time - time_now));
 	while (1)
 	{
 		gettimeofday(&var, NULL);
 		time_now = var.tv_usec + (var.tv_sec * 1000000);
-		if (time_now - this->last_meal > this->shared->sim_data.time_to_die)
+		if (time_now >= this->starvation_time)
 		{
 			change_state(this, DIE);
-			return (1);
+			return (STARVED);
 		}
 		else if (time_now >= wait_target)
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:51:58 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:06:13 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 17:59:11 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void	init_states_cuz_shitty_norm(char *state_str[])
 
 int	change_state(t_philo *this, t_philo_state state)
 {
+	int			error;
 	char		*state_str[5];
 	suseconds_t	time_stamp;
-	int			error;
 
 	init_states_cuz_shitty_norm(state_str);
 	time_stamp = (get_time() - this->shared->sim_data.start_time) / 1000;
