@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 18:23:42 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 20:34:03 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,21 @@ void	do_one_philo(t_philo *this)
 static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
-		return (a - 512);
-	return (b - 512);
+		return ((suseconds_t)(a / 2));
+	return ((suseconds_t)(b / 2));
 }
 
 int	ft_usleep(t_philo *this, suseconds_t t)
 {
 	suseconds_t		wait_target;
 	suseconds_t		time_now;
-	struct timeval	var;
 
 	time_now = get_time();
 	wait_target = time_now + t;
 	usleep((int)get_sleep_time(t, this->starvation_time - time_now));
 	while (1)
 	{
-		gettimeofday(&var, NULL);
-		time_now = var.tv_usec + (var.tv_sec * 1000000);
+		time_now = get_time();
 		if (time_now >= this->starvation_time)
 		{
 			change_state(this, DIE);

@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 13:39:20 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 18:20:31 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 20:13:58 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,18 @@ int	eat_then_sleep(t_philo *this)
 	return (0);
 }
 
-void	think(t_philo *this)
+int	think(t_philo *this)
 {
 	suseconds_t	forced_think_duration;
 
-	forced_think_duration = this->starvation_time - this->shared->sim_data.time_to_eat - 128;
+	forced_think_duration = this->starvation_time - get_time() - \
+		(this->shared->sim_data.time_to_eat + this->shared->sim_data.time_to_eat);
 	if (forced_think_duration > 0)
-		ft_usleep(this, forced_think_duration);
+	{
+		if (change_state(this, THINK))
+			return (DEATH_VAL);
+		if (ft_usleep(this, forced_think_duration))
+			return (DEATH_VAL) ;
+	}
+	return (0);
 }

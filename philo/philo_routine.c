@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:51:14 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 20:00:06 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	routine_loop(t_philo *this)
 		}
 		else
 			return ;
-		think(this);
+		if (think(this))
+			return ;
 	}
 }
 

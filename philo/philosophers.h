@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:50:05 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 20:08:35 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef enum e_philo_state
 	SLEEP,
 	THINK,
 	DIE,
+	WOKE,
+	STT,
 }t_philo_state;
 
 /* Core -----------------------------------------*/
@@ -90,7 +92,7 @@ void		release_forks_state(t_philo *this);
 void		release_forks_mutex(t_philo *this);
 // States
 int			eat_then_sleep(t_philo *this);
-void		think(t_philo *this);
+int			think(t_philo *this);
 
 /* Philo Utils ----------------------------------*/
 
