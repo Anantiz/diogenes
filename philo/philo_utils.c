@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:49:42 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 20:34:03 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/04 20:39:14 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	do_one_philo(t_philo *this)
 static suseconds_t	get_sleep_time(suseconds_t a, suseconds_t b)
 {
 	if (a < b)
-		return ((suseconds_t)(a / 2));
-	return ((suseconds_t)(b / 2));
+		return ((suseconds_t)(a));
+	return ((suseconds_t)(b));
 }
 
 int	ft_usleep(t_philo *this, suseconds_t t)
