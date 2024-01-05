@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 20:00:06 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/05 14:04:14 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	*philosopher_routine(void *this_)
 	if ((this->number) % 2 == 0)
 	{
 		if (this->shared->sim_data.philo_count % 2 == 1 && \
-			this->number +1 == this->shared->sim_data.philo_count)
+			this->number == this->shared->sim_data.philo_count)
 			ft_usleep(this, this->shared->sim_data.time_to_eat + 1);
 		else
 			ft_usleep(this, (this->shared->sim_data.time_to_eat / 2));
