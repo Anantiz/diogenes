@@ -6,16 +6,16 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 23:32:45 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/08 04:40:17 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-int	fork_unlocker(t_philo *this)
+void	fork_unlocker(t_philo *this)
 {
 	sem_post(this->forks_count);
-	return (sem_post(this->forks_count));
+	sem_post(this->forks_count);
 }
 
 int	get_forks(t_philo *this)
@@ -35,9 +35,8 @@ int	eat_then_sleep(t_philo *this)
 {
 	change_state(this, EAT);
 	ft_usleep(this, this->shared.sim_data.time_to_eat);
-	if (fork_unlocker(this))
-		return (-1);
-	this->starvation_time = get_time();
+	fork_unlocker(this);
+	this->starvation_time = get_time() + this->shared.sim_data.time_to_die;
 	this->meal_count++;
 	if (this->shared.sim_data.time_to_sleep > 0)
 	{

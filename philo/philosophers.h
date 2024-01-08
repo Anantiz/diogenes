@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 20:08:35 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/08 04:44:09 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_shared
 	int				*forks_state;
 	pthread_mutex_t	*forks_lock;
 	pthread_mutex_t	*print_lock;
-	pthread_mutex_t	*one_to_rule_them_all;
 	pthread_t		*philosophers_id;
 }t_shared;
 
@@ -88,7 +87,6 @@ int			spawn_philosophers(t_shared *shared);
 void		*philosopher_routine(void *this_);
 // Forks
 int			get_forks(t_philo *this);
-void		release_forks_state(t_philo *this);
 void		release_forks_mutex(t_philo *this);
 // States
 int			eat_then_sleep(t_philo *this);

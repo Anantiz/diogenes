@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 05:44:50 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/08 04:50:04 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,19 @@ static void	wait_others(void)
 
 	my_sem_wait = SEM_FAILED;
 	while (my_sem_wait == SEM_FAILED)
-	{
 		my_sem_wait = sem_open(SEM_WAIT, 0);
-	}
 	sem_wait(my_sem_wait);
 	sem_close(my_sem_wait);
 }
 
 static void	synchronize_processes(t_philo *this)
 {
-	this->starvation_time = get_time();
-	if ((this->number + 1) % 2 == 0)
+	this->starvation_time = get_time() + this->shared.sim_data.time_to_die;
+	if ((this->number) % 2 == 0)
 	{
 		if (this->shared.sim_data.philo_count % 2 == 1 && \
-			this->number + 1 == this->shared.sim_data.philo_count)
-		{
+			this->number == this->shared.sim_data.philo_count)
 			ft_usleep(this, this->shared.sim_data.time_to_eat + 1);
-		}
 		else
 			ft_usleep(this, (this->shared.sim_data.time_to_eat / 2));
 	}

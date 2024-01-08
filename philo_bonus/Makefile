@@ -6,12 +6,12 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2023/12/22 18:26:08 by aurban           ###   ########.fr        #
+#    Updated: 2024/01/08 05:11:14 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC:=gcc
-CFLAGS:= -Wall -Werror -Wextra -pthread
+CFLAGS:= -Wall -Werror -Wextra
 RM:=rm -rf
 
 NAME:=philo_bonus

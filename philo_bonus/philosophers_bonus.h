@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:49:48 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:11:23 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/08 04:40:46 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ int			get_forks(t_philo *this);
 
 void		change_state(t_philo *this, t_philo_state state);
 int			did_i_starve(t_philo *this);
-int			fork_unlocker(t_philo *this);
+void		fork_unlocker(t_philo *this);
 void		do_one_philo(t_philo *this);
-int			ft_usleep(t_philo *this, suseconds_t t);
+void		ft_usleep(t_philo *this, suseconds_t t);
 
 /* GLOBAL UTILS*/
 

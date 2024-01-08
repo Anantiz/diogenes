@@ -6,20 +6,18 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 00:59:19 by aurban            #+#    #+#             */
-/*   Updated: 2024/01/04 17:10:35 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/08 04:19:13 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	pre_init_data(t_shared *shared, pthread_mutex_t *print_lock,
-	pthread_mutex_t *one_to_rule_them_all)
+static void	pre_init_data(t_shared *shared, pthread_mutex_t *print_lock)
 {
 	shared->death = 0;
 	shared->forks_state = NULL;
 	shared->forks_lock = NULL;
 	shared->print_lock = print_lock;
-	shared->one_to_rule_them_all = one_to_rule_them_all;
 	shared->philosophers_id = NULL;
 }
 
@@ -38,14 +36,13 @@ static void	print_invalid_input(void)
 int	main(int argc, char **argv)
 {
 	pthread_mutex_t	print_lock;
-	pthread_mutex_t	one_to_rule_them_all;
 	t_shared		shared;
 	int				error;
 	int				i;
 
 	if (argc < 5 || argc > 6)
 		return (print_invalid_input(), 0);
-	pre_init_data(&shared, &print_lock, &one_to_rule_them_all);
+	pre_init_data(&shared, &print_lock);
 	error = init_shared_resources(&shared, argc, argv);
 	if (error < 0)
 		return (1);
