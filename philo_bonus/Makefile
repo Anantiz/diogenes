@@ -6,7 +6,7 @@
 #    By: aurban <aurban@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 01:00:11 by aurban            #+#    #+#              #
-#    Updated: 2024/01/08 05:11:14 by aurban           ###   ########.fr        #
+#    Updated: 2024/01/10 12:04:04 by aurban           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,4 +39,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus philo
+.PHONY: all clean fclean re

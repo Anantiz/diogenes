@@ -6,7 +6,7 @@
 /*   By: aurban <aurban@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 01:30:48 by aurban            #+#    #+#             */
-/*   Updated: 2023/12/22 18:12:07 by aurban           ###   ########.fr       */
+/*   Updated: 2024/01/10 12:04:50 by aurban           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	spawn_philosophers(t_shared *shared)
 			return (-1);
 		pid = fork();
 		if (pid == -1)
-			return (-1);
+			return (free(philo), -1);
 		if (pid == 0)
 			philosopher_routine(philo);
 		else
